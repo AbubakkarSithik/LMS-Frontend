@@ -16,6 +16,7 @@ const SignupStep: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [emailSent , setEmailSent] = useState<boolean>(false);
   const [loading , setLoading] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(false);
 
   const validateField = (field: "email" | "password", value: string) => {
     const result = signupSchema.safeParse({ email, password, [field]: value });
@@ -46,7 +47,7 @@ const SignupStep: React.FC = () => {
 
   try {
     setLoading(true);
-    const apiUrl = `http://localhost:4005/auth/signup`;
+    const apiUrl = `http://localhost:4005/auth/${isLogin ? "login" : "signup"}`;
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
@@ -56,6 +57,7 @@ const SignupStep: React.FC = () => {
         email: result.data.email,
         password: result.data.password,
       }),
+      credentials: "include",
     });
 
     if (!response.ok) {
@@ -82,9 +84,9 @@ const SignupStep: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="w-full max-w-md p-8"
         >
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Sign Up</h2>
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">{isLogin ? "Login" : "Sign Up"}</h2>
 
-          <form className="space-y-5" onSubmit={handleSubmit} name="signup" id="signup">
+          <form className="space-y-5" onSubmit={handleSubmit} name={isLogin ? "Login" : "Sign Up"} id={isLogin ? "Login" : "Sign Up"}>
             {/* Email */}
             <div className="relative">
               <RiMailLine className="absolute left-3 top-2.5 text-gray-800" size={20} />
@@ -143,9 +145,11 @@ const SignupStep: React.FC = () => {
               type="submit"
               className="w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
             >
-               {loading ? <RiLoader2Line className="animate-spin text-white text-lg" size={20} />: <div>Sign Up</div>}
+               {loading ? <RiLoader2Line className="animate-spin text-white text-lg" size={20} />: <div>{isLogin ? "Login" : "Sign Up"}</div>}
             </Button>
           </form>
+          <p className="mt-4">{isLogin ? "Don't have an account?" : "Already have an account?"} <Button className="text-ts12 p-0 bg-transparent hover:bg-transparent hover:text-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 cursor-pointer"
+            onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "Login"}</Button></p>
    </motion.div>}
    {emailSent && <motion.div
           initial={{ opacity: 0, x: 40 }}

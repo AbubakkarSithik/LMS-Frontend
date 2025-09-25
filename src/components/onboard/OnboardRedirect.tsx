@@ -4,6 +4,7 @@ import { supabase } from "@/lib/services/supabaseClient";
 import { useDispatch } from "react-redux";
 import { setSession, clearSession } from "@/lib/store/slices/authSlice";
 import type { AppDispatch } from "@/lib/store/store";
+import { RiLoader2Line } from "@remixicon/react";
 
 const OnboardRedirect: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const OnboardRedirect: React.FC = () => {
       if (session) {
         dispatch(setSession(session));
         clearUrlHash();
-        navigate("/onboard"); // <-- change to your route
+        navigate("/onboard"); 
       }
     });
 
@@ -44,7 +45,7 @@ const OnboardRedirect: React.FC = () => {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <p className="text-gray-600 animate-pulse">Verifying your account, please wait...</p>
+      <p className="text-gray-600 animate-pulse text-lg flex gap-2 items-center justify-between">Verifying your account, please wait<RiLoader2Line className="animate-spin text-ts12 text-lg" size={20} /></p>
     </div>
   );
 };

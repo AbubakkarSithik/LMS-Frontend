@@ -3,80 +3,65 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "@/lib/store/store";
-import { supabase } from "@/lib/services/supabaseClient";
 import { setSession, clearSession } from "@/lib/store/slices/authSlice";
-import Cookies from "js-cookie";
+import { RiLoader2Line } from "@remixicon/react";
 
 const Onboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { session } = useSelector((state: RootState) => state.auth);
+  const [loading, setLoading] = useState(true);
 
-  const [loading, setLoading] = useState(true); 
-
+  // Restore session from backend (cookies)
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const { data } = await supabase.auth.getSession();
-        if (data.session) {
-          dispatch(setSession(data.session));
-          Cookies.set("lms_session", JSON.stringify(data.session), {
-            secure: true,
-            sameSite: "strict",
-          });
+        const res = await fetch("http://localhost:4005/auth/restore", {
+          credentials: "include", // send cookies
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          dispatch(setSession(data));
         } else {
-          const cookieSession = Cookies.get("lms_session");
-          if (cookieSession) {
-            try {
-              const parsed = JSON.parse(cookieSession);
-              dispatch(setSession(parsed));
-            } catch {
-              Cookies.remove("lms_session");
-              navigate("/");
-            }
-          } else {
-            navigate("/");
-          }
+          dispatch(clearSession());
+          navigate("/"); // unauthorized
         }
+      } catch (err) {
+        console.error("Restore session failed:", err);
+        dispatch(clearSession());
+        navigate("/");
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     };
 
     restoreSession();
-
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        if (session) {
-          dispatch(setSession(session));
-          Cookies.set("lms_session", JSON.stringify(session), {
-            secure: true,
-            sameSite: "strict",
-          });
-        } else {
-          dispatch(clearSession());
-          Cookies.remove("lms_session");
-          navigate("/");
-        }
-      }
-    );
-
-    return () => listener.subscription.unsubscribe();
   }, [dispatch, navigate]);
 
+  // optional safeguard
   useEffect(() => {
-    if (!loading && !session) {
-      navigate("/");
-    }
-  }, [session, loading, navigate]);
+    const interval = setInterval(async () => {
+      const res = await fetch("http://localhost:4005/auth/restore", {
+        credentials: "include",
+      });
+      if (!res.ok) {
+        dispatch(clearSession());
+        navigate("/");
+      }
+    }, 60_000); 
+    return () => clearInterval(interval);
+  }, [dispatch, navigate]);
 
   if (loading) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <p>Loading...</p>
+      <div className="flex h-screen items-center justify-center">
+        <p className="text-gray-500 text-lg flex gap-2 items-center justify-between">Loading <RiLoader2Line className="animate-spin text-ts12 text-lg" size={20} /></p>
       </div>
     );
   }
+
+  if (!session) return null; // if no session after restore, redirect already happened
 
   return (
     <div className="flex h-screen w-screen font-manrope">
@@ -103,7 +88,9 @@ const Onboard: React.FC = () => {
 
       {/* Right Side */}
       <div className="flex w-1/2 bg-white justify-center items-center">
-        <p>Welcome! You are logged in.</p>
+        <p className="text-lg font-semibold text-gray-800">
+          🎉 Welcome {session.user?.email}, you are logged in!
+        </p>
       </div>
     </div>
   );
