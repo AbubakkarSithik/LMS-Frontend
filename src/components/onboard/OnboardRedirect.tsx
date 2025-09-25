@@ -10,14 +10,12 @@ const OnboardRedirect: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    // Helper: remove tokens from URL
     const clearUrlHash = () => {
       if (window.location.hash || window.location.search) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
     };
 
-    // 1. Check for existing session (may be set by Supabase after redirect)
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         dispatch(setSession(session));
@@ -26,14 +24,14 @@ const OnboardRedirect: React.FC = () => {
       }
     });
 
-    // 2. Listen for auth state changes (email confirm creates session here)
+    // email confirm creates session here
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session) {
         dispatch(setSession(session));
         clearUrlHash();
-        navigate("/onboard"); // <-- change to your route
+        navigate("/onboard"); 
       } else {
         dispatch(clearSession());
       }
@@ -46,7 +44,7 @@ const OnboardRedirect: React.FC = () => {
 
   return (
     <div className="flex h-screen items-center justify-center">
-      <p className="text-gray-600">Verifying your account, please wait...</p>
+      <p className="text-gray-600 animate-pulse">Verifying your account, please wait...</p>
     </div>
   );
 };

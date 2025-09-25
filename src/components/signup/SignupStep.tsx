@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RiMailLine, RiLockLine ,RiEyeLine, RiEyeOffLine } from "@remixicon/react";
+import { RiMailLine, RiLockLine ,RiEyeLine, RiEyeOffLine, RiLoader2Line } from "@remixicon/react";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/lib/store/store";
 import { setEmail, setPassword, resetSignup } from "@/lib/store/slices/signupSlice";
@@ -15,6 +15,7 @@ const SignupStep: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [emailSent , setEmailSent] = useState<boolean>(false);
+  const [loading , setLoading] = useState<boolean>(false);
 
   const validateField = (field: "email" | "password", value: string) => {
     const result = signupSchema.safeParse({ email, password, [field]: value });
@@ -44,6 +45,7 @@ const SignupStep: React.FC = () => {
   setErrors({});
 
   try {
+    setLoading(true);
     const apiUrl = `http://localhost:4005/auth/signup`;
     const response = await fetch(apiUrl, {
       method: "POST",
@@ -64,7 +66,7 @@ const SignupStep: React.FC = () => {
 
     const data = await response.json();
     data.user.aud && setEmailSent(true);
-
+    setLoading(false);
     dispatch(resetSignup());
   } catch (error) {
     console.error("Signup error:", error);
@@ -141,7 +143,7 @@ const SignupStep: React.FC = () => {
               type="submit"
               className="w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
             >
-              Sign In
+               {loading ? <RiLoader2Line className="animate-spin text-white text-lg" size={20} />: <div>Sign Up</div>}
             </Button>
           </form>
    </motion.div>}
