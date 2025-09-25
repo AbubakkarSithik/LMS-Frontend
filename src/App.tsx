@@ -1,11 +1,13 @@
 import './App.css'
+import { Route, Routes } from 'react-router-dom'
+import Onboard from './components/onboard/Onboard'
 
 function App() {
 
   return (
-    <>
-      <p>LMS</p>
-    </>
+    <Routes>
+      <Route path="/" element={<Onboard/>} />
+    </Routes>
   )
 }
 
