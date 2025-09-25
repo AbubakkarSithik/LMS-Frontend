@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
+import SignupStep from "./SignupStep";
 
-const Onboard: React.FC = () => {
-
+const SignupLayout: React.FC = () => {
   return (
     <div className="flex h-screen w-screen font-manrope">
       {/* Left Side */}
@@ -30,10 +30,10 @@ const Onboard: React.FC = () => {
 
       {/* Right Side */}
       <div className="flex w-1/2 bg-white justify-center items-center">
-         hehe
+       <SignupStep />
       </div>
     </div>
   );
 };
 
-export default Onboard;
+export default SignupLayout;
