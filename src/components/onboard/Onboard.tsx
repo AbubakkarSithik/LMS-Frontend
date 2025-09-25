@@ -1,11 +1,76 @@
-import React from 'react'
+import React from "react";
+import { motion } from "framer-motion";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { RiMailLine, RiLockLine } from "@remixicon/react";
 
 const Onboard: React.FC = () => {
   return (
-    <div>
-      hiiiiiiii
-    </div>
-  )
-}
+    <div className="flex h-screen w-screen font-manrope">
+      {/* Left Side */}
+      <div className="relative flex flex-col justify-center items-center w-1/2 overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute -top-8 -left-10 size-[800px] bg-gradient-to-br from-ts12 via-orange-500 to-orange-700 blur-2xl opacity-90" />
+        {/* Accent gradient bottom-right */}
+        <div className="absolute top-0 right-0 size-[300px] bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full blur-3xl opacity-80" />
+        <div className="absolute -bottom-6 -left-6 size-[300px] bg-gradient-to-tr from-orange-200 to-orange-100 rounded-full blur-3xl opacity-80" />
+        
+        {/* Foreground branding */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-10 text-center px-6"
+        >
+          <h1 className="text-4xl font-extrabold text-white drop-shadow-lg">
+            Leave Management System
+          </h1>
+          <p className="mt-4 text-lg text-orange-100">
+            Simplify your employee leave tracking with ease and efficiency.
+          </p>
+        </motion.div>
+      </div>
 
-export default Onboard
+      {/* Right Side */}
+      <div className="flex w-1/2 bg-white justify-center items-center">
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          className="w-full max-w-md p-8"
+        >
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Sign Up</h2>
+
+          <form className="space-y-5">
+            {/* Email */}
+            <div className="relative">
+              <RiMailLine className="absolute left-3 top-2.5 text-gray-800" size={20} />
+              <Input
+                type="email"
+                placeholder="Org email"
+                className="pl-10"
+              />
+            </div>
+
+            {/* Password */}
+            <div className="relative">
+              <RiLockLine className="absolute left-3 top-2.5 text-gray-800" size={20} />
+              <Input
+                type="password"
+                placeholder="Password"
+                className="pl-10"
+              />
+            </div>
+
+            {/* Button */}
+            <Button className="w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white">
+              Sign In
+            </Button>
+          </form>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default Onboard;
