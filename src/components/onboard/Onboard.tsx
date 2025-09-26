@@ -24,31 +24,42 @@ const Onboard: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successPopup, setSuccessPopup] = useState<boolean>(false);
 
-  // Restore session 
-  useEffect(() => {
-    const restoreSession = async () => {
-      try {
-        const res = await fetch("http://localhost:4005/auth/restore", {
+useEffect(() => {
+  const restoreSessionAndCheckOnboard = async () => {
+    try {
+      const res = await fetch("http://localhost:4005/auth/restore", {
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        dispatch(setSession(data));
+        const onboardRes = await fetch("http://localhost:4005/users/me", {
           credentials: "include",
         });
 
-        if (res.ok) {
-          const data = await res.json();
-          dispatch(setSession(data));
-        } else {
-          dispatch(clearSession());
-          navigate("/");
+        if (onboardRes.ok) {
+          const appUser = await onboardRes.json();
+          if (appUser && appUser.id) {
+            navigate("/dashboard");
+            return;
+          }
         }
-      } catch {
+      } else {
         dispatch(clearSession());
         navigate("/");
-      } finally {
-        setLoading(false);
       }
-    };
+    } catch (err) {
+      console.error("Session restore error:", err);
+      dispatch(clearSession());
+      navigate("/");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    restoreSession();
-  }, [dispatch, navigate]);
+  restoreSessionAndCheckOnboard();
+}, [dispatch, navigate]);
 
   const handleNext = () => {
     if (step === 1) {

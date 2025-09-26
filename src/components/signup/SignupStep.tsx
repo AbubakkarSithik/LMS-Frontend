@@ -13,7 +13,6 @@ const SignupStep: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { email, password } = useSelector((state: RootState) => state.signup);
-
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [emailSent , setEmailSent] = useState<boolean>(false);
@@ -64,7 +63,8 @@ const SignupStep: React.FC = () => {
 
     if (!response.ok) {
       const errorData = await response.json();
-      alert("❌ Signup failed: " + errorData.message);
+      alert("Signup failed: " + errorData.message);
+      setLoading(false);
       return;
     }
 
@@ -75,7 +75,7 @@ const SignupStep: React.FC = () => {
     dispatch(resetSignup());
   } catch (error) {
     console.error("Signup error:", error);
-    alert("⚠️ Something went wrong, please try again.");
+    alert("Something went wrong, please try again.");
   }
 };
 
@@ -154,7 +154,7 @@ const SignupStep: React.FC = () => {
           <p className="mt-4">{isLogin ? "Don't have an account?" : "Already have an account?"} <Button className="text-ts12 p-0 bg-transparent hover:bg-transparent hover:text-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 cursor-pointer"
             onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Sign Up" : "Login"}</Button></p>
    </motion.div>}
-   {emailSent && <motion.div
+   {emailSent && !isLogin && <motion.div
           initial={{ opacity: 0, x: 40 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
