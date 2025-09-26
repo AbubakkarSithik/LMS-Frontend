@@ -24,7 +24,7 @@ const Onboard: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successPopup, setSuccessPopup] = useState<boolean>(false);
 
-  // Restore session from backend (cookies)
+  // Restore session 
   useEffect(() => {
     const restoreSession = async () => {
       try {
@@ -91,10 +91,10 @@ const Onboard: React.FC = () => {
 
       if (res.ok) {
         dispatch(resetOnboard());
-        setSuccessPopup(true); // show hurray popup
+        setSuccessPopup(true); 
         setTimeout(() => {
           setSuccessPopup(false);
-          setStep(3); // move to invite users
+          setStep(3);
       }, 2500);
       } else {
         const err = await res.json();
