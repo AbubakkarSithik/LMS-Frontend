@@ -14,3 +14,9 @@ export interface OnboardState {
   first_name: string;
   last_name: string;
 }
+
+export type OrganizationState = {
+    organization_id: string;
+    name: string,
+    subdomain: string
+};

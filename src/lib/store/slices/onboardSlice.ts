@@ -15,7 +15,7 @@ const onboardSlice = createSlice({
   reducers: {
     setOnboardField: (
       state,
-      action: PayloadAction<{ field: keyof OnboardState; value: string }>
+      action: PayloadAction<{ field: keyof OnboardState; value: string  }>
     ) => {
       state[action.payload.field] = action.payload.value;
     },
