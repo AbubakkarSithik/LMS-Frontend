@@ -7,9 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "@/lib/store/store";
 import { setEmail, setPassword, resetSignup } from "@/lib/store/slices/signupSlice";
 import { signupSchema } from "@/lib/validation/signupSchema";
+import { useNavigate } from "react-router-dom";
 
 const SignupStep: React.FC = () => {
-    const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const { email, password } = useSelector((state: RootState) => state.signup);
 
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
@@ -69,6 +71,7 @@ const SignupStep: React.FC = () => {
     const data = await response.json();
     data.user.aud && setEmailSent(true);
     setLoading(false);
+    if (isLogin) navigate("/onboard");
     dispatch(resetSignup());
   } catch (error) {
     console.error("Signup error:", error);

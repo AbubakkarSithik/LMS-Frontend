@@ -6,3 +6,11 @@ export interface SignupState {
 export interface SignupStepProps{
     setStep?: (step: number) => void
 }
+
+export interface OnboardState {
+  org_name: string;
+  subdomain: string;
+  username: string;
+  first_name: string;
+  last_name: string;
+}
