@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/lib/services/supabaseClient";
 import { useDispatch } from "react-redux";
 import { setSession, clearSession } from "@/lib/store/slices/authSlice";
 import type { AppDispatch } from "@/lib/store/store";
@@ -10,15 +9,15 @@ const OnboardRedirect: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [resending, setResending] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.hash.replace("#", "?"));
     const error = params.get("error");
-    const errorCode = params.get("error_code");
     const errorDesc = params.get("error_description");
+    const accessToken = params.get("access_token");
+    const refreshToken = params.get("refresh_token");
 
-    if (error || errorCode) {
+    if (error) {
       setErrorMessage(errorDesc || "Invalid or expired link. Please request a new one.");
       dispatch(clearSession());
       return;
@@ -30,67 +29,50 @@ const OnboardRedirect: React.FC = () => {
       }
     };
 
-    // Restore session if already set
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        dispatch(setSession(session));
-        clearUrlHash();
-        navigate("/onboard");
-      }
-    });
+    const handleTokenFromUrl = async () => {
+      if (accessToken && refreshToken) {
+        const res = await fetch("http://localhost:4005/auth/set-session", {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ access_token: accessToken, refresh_token: refreshToken }),
+        });
 
-    // Subscribe for auth events (email confirm triggers this)
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (session) {
+        if (res.ok) {
+          const { session } = await res.json();
+          dispatch(setSession(session));
+          clearUrlHash();
+          navigate("/onboard", { replace: true });
+        } else {
+          setErrorMessage("Failed to create session from link. Please log in again.");
+        }
+        return true;
+      }
+      return false;
+    };
+
+    const restoreSession = async () => {
+      const res = await fetch("http://localhost:4005/auth/restore", { credentials: "include" });
+      if (res.ok) {
+        const { session} = await res.json();
         dispatch(setSession(session));
         clearUrlHash();
-        navigate("/onboard");
+        navigate("/onboard", { replace: true });
       } else {
-        dispatch(clearSession());
+        setErrorMessage("Could not restore session. Please log in again.");
       }
-    });
+    };
 
-    return () => subscription.unsubscribe();
+    (async () => {
+      const usedTokens = await handleTokenFromUrl();
+      if (!usedTokens) await restoreSession();
+    })();
   }, [dispatch, navigate]);
-
-  const handleResendEmail = async () => {
-    setResending(true);
-    const user = (await supabase.auth.getUser()).data.user;
-
-    if (!user?.email) {
-      setErrorMessage("Cannot resend verification: no user email found.");
-      setResending(false);
-      return;
-    }
-
-    // Resend verification email
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: user.email,
-    });
-
-    setResending(false);
-
-    if (error) {
-      setErrorMessage("Failed to resend verification: " + error.message);
-    } else {
-      setErrorMessage(`A new verification email has been sent to ${user.email}. Please check your inbox.`);
-    }
-  };
 
   if (errorMessage) {
     return (
       <div className="flex h-screen items-center justify-center flex-col gap-4 text-center">
         <p className="text-red-500 font-medium">{errorMessage}</p>
-        <button
-          onClick={handleResendEmail}
-          disabled={resending}
-          className="px-4 py-2 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
-        >
-          {resending ? "Resending..." : "Resend Verification Email"}
-        </button>
         <button
           onClick={() => navigate("/")}
           className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition cursor-pointer"
