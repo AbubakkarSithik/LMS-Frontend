@@ -9,13 +9,24 @@ const OnboardRedirect: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [inviteFlow, setInviteFlow] = useState(false);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.hash.replace("#", "?"));
+    const params = new URLSearchParams(
+      window.location.hash
+        ? window.location.hash.replace("#", "?")
+        : window.location.search
+    );
+
     const error = params.get("error");
     const errorDesc = params.get("error_description");
     const accessToken = params.get("access_token");
     const refreshToken = params.get("refresh_token");
+    const type = params.get("type");
+
+    if (type === "invite") {
+      setInviteFlow(true);
+    }
 
     if (error) {
       setErrorMessage(errorDesc || "Invalid or expired link. Please request a new one.");
@@ -23,7 +34,7 @@ const OnboardRedirect: React.FC = () => {
       return;
     }
 
-    const clearUrlHash = () => {
+    const clearUrlParams = () => {
       if (window.location.hash || window.location.search) {
         window.history.replaceState({}, document.title, window.location.pathname);
       }
@@ -41,7 +52,7 @@ const OnboardRedirect: React.FC = () => {
         if (res.ok) {
           const { session } = await res.json();
           dispatch(setSession(session));
-          clearUrlHash();
+          clearUrlParams();
           navigate("/onboard", { replace: true });
         } else {
           setErrorMessage("Failed to create session from link. Please log in again.");
@@ -52,11 +63,13 @@ const OnboardRedirect: React.FC = () => {
     };
 
     const restoreSession = async () => {
-      const res = await fetch("http://localhost:4005/auth/restore", { credentials: "include" });
+      const res = await fetch("http://localhost:4005/auth/restore", {
+        credentials: "include",
+      });
       if (res.ok) {
-        const { session} = await res.json();
+        const { session } = await res.json();
         dispatch(setSession(session));
-        clearUrlHash();
+        clearUrlParams();
         navigate("/onboard", { replace: true });
       } else {
         setErrorMessage("Could not restore session. Please log in again.");
@@ -86,7 +99,7 @@ const OnboardRedirect: React.FC = () => {
   return (
     <div className="flex h-screen items-center justify-center">
       <p className="text-gray-600 animate-pulse text-lg flex gap-2 items-center">
-        Verifying your account, please wait
+        {inviteFlow ? "Accepting your invite, please wait" : "Verifying your account, please wait"}
         <RiLoader2Line className="animate-spin text-ts12 text-lg" size={20} />
       </p>
     </div>

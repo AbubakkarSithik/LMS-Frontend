@@ -1,3 +1,4 @@
+import type { Session } from "@supabase/supabase-js";
 export interface SignupState {
   email: string;
   password: string;
@@ -20,3 +21,16 @@ export type OrganizationState = {
     name: string,
     subdomain: string
 };
+
+export interface AppUser {
+  id: string;
+  email: string;
+  role_id: number;
+  organization_id: number;
+  first_name?: string;
+  last_name?: string;
+}
+export interface AuthState {
+  session: Session | null;
+  appUser: AppUser | null;
+}

@@ -146,6 +146,7 @@ const SignupStep: React.FC = () => {
             {/* Button */}
             <Button
               type="submit"
+              disabled={loading}
               className="w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
             >
                {loading ? <RiLoader2Line className="animate-spin text-white text-lg" size={20} />: <div>{isLogin ? "Login" : "Sign Up"}</div>}

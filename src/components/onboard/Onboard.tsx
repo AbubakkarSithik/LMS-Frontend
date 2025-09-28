@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "@/lib/store/store";
-import { setSession, clearSession } from "@/lib/store/slices/authSlice";
+import { setSession, clearSession , setAppUser} from "@/lib/store/slices/authSlice";
 import { setOnboardField, resetOnboard } from "@/lib/store/slices/onboardSlice";
 import { RiArrowLeftLongLine, RiArrowRightSLine, RiLoader2Line } from "@remixicon/react";
 import { step1Schema , step2Schema } from "@/lib/validation/onboardSchema";
@@ -13,16 +13,18 @@ import { Input } from "../ui/input";
 import { Dialog, DialogContent } from "../ui/dialog";
 import InviteUser from "./InviteUser";
 import { setOrganizationField  } from "@/lib/store/slices/organizationSlice";
+import UserOnboard from "./UserOnboard";
 
 const Onboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { session } = useSelector((state: RootState) => state.auth);
+  const { session , appUser } = useSelector((state: RootState) => state.auth);
   const onboard = useSelector((state: RootState) => state.onboard);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState(1);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successPopup, setSuccessPopup] = useState<boolean>(false);
+  const [isAdmin , setIsAdmin] = useState<boolean>(false);
 
 useEffect(() => {
   const restoreSessionAndCheckOnboard = async () => {
@@ -33,6 +35,7 @@ useEffect(() => {
 
       if (res.ok) {
         const data = await res.json();
+        console.log(data);
         dispatch(setSession(data));
         const onboardRes = await fetch("http://localhost:4005/users/me", {
           credentials: "include",
@@ -40,10 +43,13 @@ useEffect(() => {
 
         if (onboardRes.ok) {
           const appUser = await onboardRes.json();
-          if (appUser && appUser.id) {
-            navigate("/dashboard");
-            return;
-          }
+          dispatch(setAppUser(appUser));
+          if (appUser.organization_id && appUser.first_name !== "f_name" && appUser.last_name !== "l_name") {
+              navigate("/dashboard");
+              return;
+            }
+        }else{
+          setIsAdmin(true);
         }
       } else {
         dispatch(clearSession());
@@ -135,6 +141,10 @@ useEffect(() => {
   }
 
   if (!session) return null;
+
+  if (appUser?.role_id !== 1001 && !isAdmin) {
+    return <UserOnboard />;
+  }
 
   return (
     <>
