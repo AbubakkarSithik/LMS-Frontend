@@ -154,7 +154,7 @@ return (
       {/* Main content area */}
       <div className="flex flex-col flex-1">
         {/* Navbar */}
-        <header className="h-14  border-b border-gray-200 flex justify-between items-center px-4 bg-green-200">
+        <header className="h-14  border-b border-gray-200 flex justify-between items-center px-4 bg-white shadow-xs">
           <h1 className="text-lg font-semibold text-black flex items-baseline gap-1 justify-center">Welcome{" "}<span className='text-ts12 text-2xl'>{(appUser?.first_name || "User") + "💚"}</span></h1>
 
           <div className="relative">
