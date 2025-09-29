@@ -15,6 +15,7 @@ const LmsLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const session = useSelector((state: RootState) => state.auth.session);
+  const appUser = useSelector((state: RootState) => state.auth.appUser);
   const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
   const org_name = useSelector((state: RootState) => state.organization.org_name);
   const [loading, setLoading] = useState<boolean>(true);
@@ -153,8 +154,8 @@ return (
       {/* Main content area */}
       <div className="flex flex-col flex-1">
         {/* Navbar */}
-        <header className="h-14 bg-white border-b border-gray-200 flex justify-between items-center px-4 shadow-sm">
-          <h1 className="text-lg font-semibold text-ts12">Welcome</h1>
+        <header className="h-14  border-b border-gray-200 flex justify-between items-center px-4 bg-green-200">
+          <h1 className="text-lg font-semibold text-black flex items-baseline gap-1 justify-center">Welcome{" "}<span className='text-ts12 text-2xl'>{(appUser?.first_name || "User") + "💚"}</span></h1>
 
           <div className="relative">
             <button

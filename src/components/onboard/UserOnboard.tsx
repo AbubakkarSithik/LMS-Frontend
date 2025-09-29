@@ -167,12 +167,11 @@ const UserOnboard: React.FC = () => {
               <h2 className="text-2xl font-semibold text-black mb-4">
                 Set your password
               </h2>
-              <Label>Password</Label>
-              <div className="w-full relative">
-                <RiLockLine className="absolute left-3 top-2.5 text-gray-800" size={20} />
+              <div className="w-full rounded-md border relative">
+                <RiLockLine className="absolute left-2.5 top-2 text-gray-800" size={20} />
                 <Input
                 type={showPassword ? "text" : "password"}
-                className="w-full border rounded-md p-2"
+                className="w-full p-2 ml-7 border-none outline-none focus-visible:ring-0 focus-within:outline-none"
                 value={form.password}
                 onChange={(e) =>
                   setForm({ ...form, password: e.target.value })
@@ -186,7 +185,7 @@ const UserOnboard: React.FC = () => {
                               transition={{ duration: 0.4 }}
                               type="button"
                               onClick={() => setShowPassword((prev) => !prev)}
-                              className="absolute right-3 top-2.5 text-gray-800 hover:text-gray-600"
+                              className="absolute right-3 top-2.5 text-gray-800 hover:text-gray-600 cursor-pointer"
                           >
                               {showPassword ? (
                               <RiEyeOffLine size={20} />
