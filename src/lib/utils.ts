@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 export const getURL = () => {
   let url =
-    process?.env?.NEXT_PUBLIC_SITE_URL ??    
-    process?.env?.NEXT_PUBLIC_VERCEL_URL ??    
-    "http://localhost:5173/";                  
+    import.meta.env.VITE_PUBLIC_SITE_URL ??  
+    import.meta.env.VITE_PUBLIC_VERCEL_URL ?? 
+    "http://localhost:5173/";
 
   url = url.startsWith("http") ? url : `https://${url}`;
   url = url.endsWith("/") ? url : `${url}/`;
