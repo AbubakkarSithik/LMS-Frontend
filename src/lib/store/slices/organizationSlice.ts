@@ -3,7 +3,7 @@ import type { OrganizationState } from "@/lib/types/type";
 
 const initialState: OrganizationState = {
   organization_id: "",
-  name: "",
+  org_name: "",
   subdomain: "",
 };
 

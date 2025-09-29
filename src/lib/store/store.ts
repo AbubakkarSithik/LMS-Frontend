@@ -5,6 +5,7 @@ import onboardReducer from "@/lib/store/slices/onboardSlice";
 import OrganizationSlice from "@/lib/store/slices/organizationSlice";
 
 export const store = configureStore({
+  devTools: import.meta.env.DEV,
   reducer: {
     signup: signupReducer,
     auth: authReducer,

@@ -18,7 +18,7 @@ export interface OnboardState {
 
 export type OrganizationState = {
     organization_id: string;
-    name: string,
+    org_name: string,
     subdomain: string
 };
 
@@ -33,4 +33,5 @@ export interface AppUser {
 export interface AuthState {
   session: Session | null;
   appUser: AppUser | null;
+  isAdmin: boolean | null;
 }

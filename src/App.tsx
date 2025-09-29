@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Onboard from './components/onboard/Onboard'
 import SignupLayout from './components/signup/SignupLayout'
 import OnboardRedirect from './components/onboard/OnboardRedirect'
-import DashboardLayout from './components/dashboard/DashboardLayout'
+import Dashboard from './components/dashboards/Dashboard'
 
 function App() {
 
@@ -12,7 +12,7 @@ function App() {
       <Route path="/" element={<SignupLayout />} />
       <Route path="/onboard-redirect" element={<OnboardRedirect />} />
       <Route path="/onboard" element={<Onboard />} />
-      <Route path="/dashboard" element={<DashboardLayout />} />
+      <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
   )
 }

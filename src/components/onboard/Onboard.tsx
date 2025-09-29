@@ -119,7 +119,7 @@ useEffect(() => {
       }
       const data = await res.json();
       dispatch(setOrganizationField({ field: "organization_id", value: data.org.organization_id }));
-      dispatch(setOrganizationField({ field: "name", value: data.org.name }));
+      dispatch(setOrganizationField({ field: "org_name", value: data.org.name }));
       dispatch(setOrganizationField({ field: "subdomain", value: data.org.subdomain }));
     } catch (err) {
       console.error("Onboard error:", err);

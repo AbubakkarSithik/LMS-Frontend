@@ -5,6 +5,7 @@ import type { AuthState , AppUser } from "@/lib/types/type";
 const initialState: AuthState = {
   session: null,
   appUser: null,
+  isAdmin: null
 };
 
 const authSlice = createSlice({
@@ -17,12 +18,16 @@ const authSlice = createSlice({
     setAppUser: (state, action: PayloadAction<AppUser | null>) => {
       state.appUser = action.payload;
     },
+    setIsAdmin: (state, action: PayloadAction<boolean | null>) => {
+      state.isAdmin = action.payload;
+    },
     clearSession: (state) => {
       state.session = null;
       state.appUser = null;
+      state.isAdmin = null;
     },
   },
 });
 
-export const { setSession, clearSession , setAppUser} = authSlice.actions;
+export const { setSession, clearSession , setAppUser , setIsAdmin} = authSlice.actions;
 export default authSlice.reducer;
