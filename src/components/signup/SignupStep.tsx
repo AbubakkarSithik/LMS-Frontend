@@ -8,6 +8,7 @@ import type { RootState, AppDispatch } from "@/lib/store/store";
 import { setEmail, setPassword, resetSignup } from "@/lib/store/slices/signupSlice";
 import { signupSchema } from "@/lib/validation/signupSchema";
 import { useNavigate } from "react-router-dom";
+import { getURL } from "@/lib/utils";
 
 const SignupStep: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -46,6 +47,13 @@ const SignupStep: React.FC = () => {
 
   setErrors({});
 
+  const loginPayload = {
+    email: result.data.email,
+    password: result.data.password,
+  };
+  const extraPayload = { redirectTo: `${getURL()}onboard-redirect` };
+  const signupPayload = { ...loginPayload, ...extraPayload };
+
   try {
     setLoading(true);
     const apiUrl = `http://localhost:4005/auth/${isLogin ? "login" : "signup"}`;
@@ -54,16 +62,13 @@ const SignupStep: React.FC = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        email: result.data.email,
-        password: result.data.password,
-      }),
+      body: JSON.stringify(isLogin ? loginPayload : signupPayload),
       credentials: "include",
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      alert("Signup failed: " + errorData.message);
+      alert(isLogin ? "Login failed: " + errorData.error : "Signup failed: " + errorData.error);
       setLoading(false);
       return;
     }

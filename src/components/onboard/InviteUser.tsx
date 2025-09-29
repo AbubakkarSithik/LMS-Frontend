@@ -7,6 +7,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { RiUserAddLine, RiCheckLine, RiLoader2Line } from "@remixicon/react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { getURL } from "@/lib/utils";
 
 interface InviteUserProps {
   onFinish: () => void;
@@ -48,6 +49,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
           email,
           role_id: roleId,
           organization_id: organization.organization_id,
+          redirectTo: `${getURL()}onboard-redirect`,
         }),
       });
 

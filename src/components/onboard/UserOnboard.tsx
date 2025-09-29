@@ -7,14 +7,14 @@ import { setSession, clearSession } from "@/lib/store/slices/authSlice";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { RiArrowLeftLongLine, RiArrowRightSLine, RiLoader2Line } from "@remixicon/react";
+import { RiArrowLeftLongLine, RiArrowRightSLine, RiEyeLine, RiEyeOffLine, RiLoader2Line, RiLockLine } from "@remixicon/react";
 
 const UserOnboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { session } = useSelector((state: RootState) => state.auth);
-
-  const [loading, setLoading] = useState(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     password: "",
@@ -76,7 +76,6 @@ const UserOnboard: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           new_password: form.password,
-          // access_token + refresh_token are sent in cookies/session
         }),
       });
 
@@ -169,20 +168,39 @@ const UserOnboard: React.FC = () => {
                 Set your password
               </h2>
               <Label>Password</Label>
-              <Input
-                type="password"
+              <div className="w-full relative">
+                <RiLockLine className="absolute left-3 top-2.5 text-gray-800" size={20} />
+                <Input
+                type={showPassword ? "text" : "password"}
                 className="w-full border rounded-md p-2"
                 value={form.password}
                 onChange={(e) =>
                   setForm({ ...form, password: e.target.value })
                 }
               />
+               {/* Toggle Eye Icon */}
+                          { form.password &&  <motion.button
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.4 }}
+                              type="button"
+                              onClick={() => setShowPassword((prev) => !prev)}
+                              className="absolute right-3 top-2.5 text-gray-800 hover:text-gray-600"
+                          >
+                              {showPassword ? (
+                              <RiEyeOffLine size={20} />
+                              ) : (
+                              <RiEyeLine size={20} />
+                              )}
+                          </motion.button> }
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-xs">{errors.password}</p>
               )}
               <Button
                 onClick={handleNext}
-                className="mt-6 w-full bg-ts12 text-white"
+                className="mt-6 w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
               >
                 Next <RiArrowRightSLine size={20} />
               </Button>
@@ -203,7 +221,7 @@ const UserOnboard: React.FC = () => {
               </h2>
               <div className="space-y-4">
                 <div>
-                  <Label>First Name</Label>
+                  <Label className="block text-gray-700 text-left mb-2">First Name</Label>
                   <Input
                     value={form.first_name}
                     onChange={(e) =>
@@ -212,7 +230,7 @@ const UserOnboard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Label>Last Name</Label>
+                  <Label className="block text-gray-700 text-left mb-2">Last Name</Label>
                   <Input
                     value={form.last_name}
                     onChange={(e) =>
@@ -221,7 +239,7 @@ const UserOnboard: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <Label>Username</Label>
+                  <Label className="block text-gray-700 text-left mb-2">Username</Label>
                   <Input
                     value={form.username}
                     onChange={(e) =>
@@ -242,7 +260,7 @@ const UserOnboard: React.FC = () => {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-ts12 text-white px-6"
+                  className="w-1/4 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
                 >
                   Submit
                 </Button>
