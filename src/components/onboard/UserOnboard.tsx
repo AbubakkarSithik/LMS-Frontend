@@ -177,7 +177,6 @@ const UserOnboard: React.FC = () => {
                   setForm({ ...form, password: e.target.value })
                 }
               />
-               {/* Toggle Eye Icon */}
                           { form.password &&  <motion.button
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}

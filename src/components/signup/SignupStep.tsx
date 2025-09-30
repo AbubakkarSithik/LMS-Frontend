@@ -81,6 +81,7 @@ const SignupStep: React.FC = () => {
   } catch (error) {
     console.error("Signup error:", error);
     alert("Something went wrong, please try again.");
+    setLoading(false);
   }
 };
 

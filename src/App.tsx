@@ -3,8 +3,8 @@ import { Route, Routes } from 'react-router-dom'
 import Onboard from './components/onboard/Onboard'
 import SignupLayout from './components/signup/SignupLayout'
 import OnboardRedirect from './components/onboard/OnboardRedirect'
-import Dashboard from './components/dashboards/Dashboard'
-import Settings from './components/dashboards/Settings'
+import Dashboard from './components/dashboard/Dashboard'
+import Settings from './components/settings/Settings'
 
 function App() {
 

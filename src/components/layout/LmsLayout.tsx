@@ -14,9 +14,7 @@ interface DashboardLayoutProps {
 const LmsLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const session = useSelector((state: RootState) => state.auth.session);
-  const appUser = useSelector((state: RootState) => state.auth.appUser);
-  const isAdmin = useSelector((state: RootState) => state.auth.isAdmin);
+  const { session , appUser , isAdmin } = useSelector((state: RootState) => state.auth);
   const org_name = useSelector((state: RootState) => state.organization.org_name);
   const [loading, setLoading] = useState<boolean>(true);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
@@ -153,7 +151,6 @@ return (
 
       {/* Main content area */}
       <div className="flex flex-col flex-1">
-        {/* Navbar */}
         <header className="h-14  border-b border-gray-200 flex justify-between items-center px-4 bg-white shadow-xs">
           <h1 className="text-lg font-semibold text-black flex items-baseline gap-1 justify-center">Welcome{" "}<span className='text-ts12 text-2xl'>{(appUser?.first_name || "User") + "💚"}</span></h1>
 
@@ -204,6 +201,7 @@ const NavItem: React.FC<{
     whileTap={{ scale: 0.95 }}
     className="flex items-center gap-3 px-2 py-2 rounded-lg text-white hover:text-orange-200 cursor-pointer"
     onClick={onClick}
+    aria-label={label}
   >
     {icon}
     <span className="truncate">{label}</span>

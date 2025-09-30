@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { getURL } from "@/lib/utils";
 
 interface InviteUserProps {
-  onFinish: () => void;
+  onFinish?: () => void;
 }
 
 const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
@@ -128,13 +128,13 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
             </>
           )}
         </Button>
-        <Button
+        { window.location.pathname === "/onboard" && <Button
           variant="secondary"
           onClick={onFinish}
           className="hover:bg-ts12 hover:text-white transition-all duration-300 cursor-pointer"
         >
           Finish <RiCheckLine size={20} />
-        </Button>
+        </Button> }
       </div>
 
       {success && (
