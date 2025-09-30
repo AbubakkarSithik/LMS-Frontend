@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import SignupStep from "./SignupStep";
+import SignupStep from "../signup/SignupStep";
 
 const SignupLayout: React.FC = () => {
   return (

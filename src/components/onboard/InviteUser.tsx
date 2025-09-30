@@ -20,6 +20,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
   const [roles, setRoles] = useState<{ role_id: number; role_name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const isOnboard: boolean = window.location.pathname === "/onboard";
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -76,12 +77,12 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -100 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-md"
+      className={`w-full ${isOnboard && "max-w-md"}`}
     >
-      <h2 className="text-2xl font-semibold text-left text-ts12 mb-6">
+      <h2 className={`text-2xl font-semibold text-ts12 mb-6 ${isOnboard && "text-left"}`}>
         Let&apos;s invite your team
       </h2>
-      <div className="space-y-4">
+      <div className={`space-y-4 ${!isOnboard && "max-w-sm mx-auto"}`}>
         <div>
           <Label className="block text-gray-700 text-left mb-2">User Email</Label>
           <Input
@@ -112,7 +113,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
         </div>
       </div>
 
-      <div className="flex justify-between items-center gap-4 mt-6">
+      <div className={`flex justify-between items-center gap-4 mt-6 ${!isOnboard && "max-w-sm mx-auto"}`}>
         <Button
           onClick={handleInvite}
           disabled={loading}
@@ -128,7 +129,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
             </>
           )}
         </Button>
-        { window.location.pathname === "/onboard" && <Button
+        { isOnboard && <Button
           variant="secondary"
           onClick={onFinish}
           className="hover:bg-ts12 hover:text-white transition-all duration-300 cursor-pointer"

@@ -2,6 +2,7 @@ import React from 'react'
 import InviteUser from '../onboard/InviteUser'
 import LmsLayout from '../layout/LmsLayout'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import ListingUsers from './settingsComponents/ListingUsers'
 
 const Settings:React.FC = () => {
   return (
@@ -12,9 +13,9 @@ const Settings:React.FC = () => {
             <TabsTrigger className='data-[state=active]:bg-ts12 data-[state=active]:text-white cursor-pointer' value="holidays">Holidays</TabsTrigger>
             <TabsTrigger className='data-[state=active]:bg-ts12 data-[state=active]:text-white cursor-pointer' value="leave-types">Leave Types</TabsTrigger>
           </TabsList>
-          <TabsContent value="invite-user" className="w-full my-5 mx-2 grid grid-cols-2">
+          <TabsContent value="invite-user" className="w-full my-5 mx-2 grid grid-cols-2 gap-0">
             <InviteUser />
-            iujciwjdcijdw
+            <ListingUsers />
           </TabsContent>
           <TabsContent value="holidays" className="w-full my-5 mx-2">
             Holidays

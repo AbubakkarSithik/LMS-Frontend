@@ -35,3 +35,12 @@ export interface AuthState {
   appUser: AppUser | null;
   isAdmin: boolean | null;
 }
+
+export interface UserRow {
+  id: string;
+  first_name: string;
+  last_name: string;
+  role_id: number;
+  created_at: string;
+  role_name?: string;
+}
