@@ -1,12 +1,10 @@
 import React from 'react'
 import InviteUser from '../onboard/InviteUser'
-import LmsLayout from '../layout/LmsLayout'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ListingUsers from './settingsComponents/ListingUsers'
 
 const Settings:React.FC = () => {
   return (
-    <LmsLayout>
         <Tabs defaultValue="invite-user" className="w-full" >
           <TabsList className="flex w-full bg-orange-100">
             <TabsTrigger className='data-[state=active]:bg-ts12 data-[state=active]:text-white cursor-pointer' value="invite-user">Invite Team</TabsTrigger>
@@ -24,7 +22,6 @@ const Settings:React.FC = () => {
             Leave Types
           </TabsContent>
         </Tabs>
-    </LmsLayout>
   )
 }
 

@@ -5,6 +5,7 @@ import SignupLayout from './components/layout/SignupLayout'
 import OnboardRedirect from './components/onboard/OnboardRedirect'
 import Dashboard from './components/dashboard/Dashboard'
 import Settings from './components/settings/Settings'
+import LmsLayout from './components/layout/LmsLayout'
 
 function App() {
 
@@ -13,8 +14,10 @@ function App() {
       <Route path="/" element={<SignupLayout />} />
       <Route path="/onboard-redirect" element={<OnboardRedirect />} />
       <Route path="/onboard" element={<Onboard />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/settings" element={<Settings />} />
+      <Route element={<LmsLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/settings" element={<Settings />} />
+      </Route>
     </Routes>
   )
 }

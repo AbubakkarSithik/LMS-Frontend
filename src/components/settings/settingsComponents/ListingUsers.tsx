@@ -13,6 +13,7 @@ const ListingUsers: React.FC = () => {
   const { organization_id } = useSelector((state: RootState) => state.organization);
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,10 +61,9 @@ const ListingUsers: React.FC = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className=" bg-white"
     >
       <h2 className="text-2xl font-semibold mb-4 text-ts12">Organization Users</h2>
-      <Table className="max-w-md mx-auto">
+      <Table className="max-w-md mx-auto border rounded-xl">
         <TableHeader>
           <TableRow className="bg-orange-50">
             <TableHead className="text-ts12">Name</TableHead>
@@ -86,7 +86,7 @@ const ListingUsers: React.FC = () => {
                     className="flex items-center gap-1 bg-ts12 text-white rounded-full px-1 py-0.5"
                   >
                     <RiShieldUserLine size={14} />{" "}
-                    {user.role_name || `Role ${user.role_id}`}
+                    {userRoles.find((role) => role.id === user.role_id)?.role_name}
                   </Badge>
                 </TableCell>
                 <TableCell>

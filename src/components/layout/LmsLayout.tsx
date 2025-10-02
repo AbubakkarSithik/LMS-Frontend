@@ -1,5 +1,5 @@
 import React ,{useEffect , useState}  from 'react'
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
 import { setSession, clearSession  , setIsAdmin} from "@/lib/store/slices/authSlice";
 import { setAppUser } from "@/lib/store/slices/authSlice";
@@ -7,11 +7,9 @@ import { RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiSettings3Line, RiTea
 import { motion } from "framer-motion";
 import { setOrganizationField } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
+import NavItem from '../ui/NavItem';
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
-const LmsLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { session , appUser , isAdmin } = useSelector((state: RootState) => state.auth);
@@ -67,7 +65,7 @@ const LmsLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
     };
   
     restoreSessionAndCheckOnboard();
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
 const handleLogout = async () => {
     setLoggingOut(true);
@@ -129,22 +127,10 @@ return (
         </div>
 
         <nav className="flex flex-col gap-3 text-sm">
-          <NavItem
-            icon={<RiDashboardLine size={20} />}
-            label="Dashboard"
-            onClick={() => navigate("/dashboard")}
-          />
-          <NavItem
-            icon={<RiTeamLine size={20} />}
-            label="Leave"
-            onClick={() => navigate("/leave")}
-          />
+          <NavItem icon={<RiDashboardLine size={20} />} label="Dashboard" to="/dashboard" />
+          <NavItem icon={<RiTeamLine size={20} />} label="Leave" to="/leave" />
           {isAdmin && (
-            <NavItem
-              icon={<RiSettings3Line size={20} />}
-              label="Settings"
-              onClick={() => navigate("/settings")}
-            />
+              <NavItem icon={<RiSettings3Line size={20} />} label="Settings" to="/settings" />
           )}
         </nav>
       </motion.aside>
@@ -185,28 +171,10 @@ return (
           </div>
         </header>
         {/* Main body */}
-        <main className="flex-1 overflow-y-auto p-4">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4"><Outlet /></main>
       </div>
     </div>
   )
 }
-
-const NavItem: React.FC<{
-  icon: React.ReactNode;
-  label: string;
-  onClick: () => void;
-}> = ({ icon, label, onClick }) => (
-  <motion.button
-    whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-    whileTap={{ scale: 0.95 }}
-    className="flex items-center gap-3 px-2 py-2 rounded-lg text-white hover:text-orange-200 cursor-pointer"
-    onClick={onClick}
-    aria-label={label}
-  >
-    {icon}
-    <span className="truncate">{label}</span>
-  </motion.button>
-);
-
 
 export default LmsLayout;
