@@ -5,7 +5,7 @@ import { setSession, clearSession  , setIsAdmin} from "@/lib/store/slices/authSl
 import { setAppUser } from "@/lib/store/slices/authSlice";
 import { RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiSettings3Line, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
-import { setOrganizationField } from '@/lib/store/slices/organizationSlice';
+import { setOrganization } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
 
@@ -13,7 +13,7 @@ const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { session , appUser , isAdmin } = useSelector((state: RootState) => state.auth);
-  const org_name = useSelector((state: RootState) => state.organization.org_name);
+  const { organization } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
@@ -47,9 +47,7 @@ const LmsLayout: React.FC = () => {
             });
           if (organizationRes.ok) {
               const org = await organizationRes.json();
-              dispatch(setOrganizationField({ field: "organization_id", value: org.organization_id }));
-              dispatch(setOrganizationField({ field: "org_name", value: org.name }));
-              dispatch(setOrganizationField({ field: "subdomain", value: org.subdomain }));
+              dispatch(setOrganization(org));
           }
         } else {
           dispatch(clearSession());
@@ -116,7 +114,7 @@ return (
       >
         <div className="mb-6 px-2">
           <div className="font-bold text-lg truncate text-orange-200">
-            {org_name ? (org_name.split(" ").map((word, index) => (
+            {organization?.name ? (organization.name.split(" ").map((word, index) => (
               <>
               <span key={index} className="inline-block">
                 {word}

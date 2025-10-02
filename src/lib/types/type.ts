@@ -16,10 +16,32 @@ export interface OnboardState {
   last_name: string;
 }
 
+export interface Holiday{
+  holiday_id : number;
+  organization_id : number;
+  name : string;
+  holiday_date : Date;
+  is_recurring : boolean;
+}
+
+export interface LeaveTypes{
+  leave_type_id : number,
+  organization_id : number,
+  name : string,
+  description : string,
+  max_days_per_year: number
+}
+
+export interface Organization {
+  organization_id: number;
+  name: string;
+  subdomain: string;
+}
+
 export type OrganizationState = {
-    organization_id: string;
-    org_name: string,
-    subdomain: string
+    organization: Organization | null,
+    holiday: Holiday | null,
+    leave_types: LeaveTypes | null
 };
 
 export interface AppUser {

@@ -14,7 +14,7 @@ interface InviteUserProps {
 }
 
 const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
-  const  organization = useSelector((state: RootState) => state.organization);
+  const  { organization } = useSelector((state: RootState) => state.organization);
   const [email, setEmail] = useState("");
   const [roleId, setRoleId] = useState("");
   const [roles, setRoles] = useState<{ role_id: number; role_name: string }[]>([]);
@@ -49,7 +49,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
         body: JSON.stringify({
           email,
           role_id: roleId,
-          organization_id: organization.organization_id,
+          organization_id: organization?.organization_id || 0,
           redirectTo: `${getURL()}onboard-redirect`,
         }),
       });

@@ -1,25 +1,27 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { OrganizationState } from "@/lib/types/type";
-
+import type { Holiday, LeaveTypes, Organization, OrganizationState } from "@/lib/types/type";
 const initialState: OrganizationState = {
-  organization_id: "",
-  org_name: "",
-  subdomain: "",
+  organization: null,
+  holiday: null,
+  leave_types: null
 };
 
 const OrganizationSlice = createSlice({
   name: "Organization",
   initialState,
   reducers: {
-    setOrganizationField: (
-      state,
-      action: PayloadAction<{ field: keyof OrganizationState; value: string  }>
-    ) => {
-      state[action.payload.field] = action.payload.value;
+    setOrganization: (state, action: PayloadAction<Organization | null>) => {
+          state.organization = action.payload;
+    },
+    setHoliday: (state, action: PayloadAction<Holiday | null>) => {
+          state.holiday = action.payload;
+    },
+    setLeaveTypes: (state, action: PayloadAction<LeaveTypes | null>) => {
+          state.leave_types = action.payload;
     },
     resetOrganization: () => initialState,
   },
 });
 
-export const { setOrganizationField, resetOrganization } = OrganizationSlice.actions;
+export const { setOrganization, setHoliday, setLeaveTypes,  resetOrganization } = OrganizationSlice.actions;
 export default OrganizationSlice.reducer;

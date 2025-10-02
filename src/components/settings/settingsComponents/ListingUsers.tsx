@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ListingUsers: React.FC = () => {
   const { isAdmin } = useSelector((state: RootState) => state.auth);
-  const { organization_id } = useSelector((state: RootState) => state.organization);
+  const { organization } = useSelector((state: RootState) => state.organization);
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
@@ -18,9 +18,9 @@ const ListingUsers: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        if (!organization_id || !isAdmin) return;
+        if (!organization?.organization_id || !isAdmin) return;
         const res = await fetch(
-          `http://localhost:4005/users/org/${organization_id}`,
+          `http://localhost:4005/users/org/${organization?.organization_id}`,
           { credentials: "include" , method: "GET"}
         );
         if (res.ok) {
@@ -37,7 +37,7 @@ const ListingUsers: React.FC = () => {
     };
 
     fetchUsers();
-  }, [organization_id, isAdmin]);
+  }, [organization?.organization_id, isAdmin]);
 
   if (loading) {
     return (
@@ -55,7 +55,6 @@ const ListingUsers: React.FC = () => {
     );
   }
 
-  console.log(users);
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

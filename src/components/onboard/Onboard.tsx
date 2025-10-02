@@ -12,7 +12,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Dialog, DialogContent } from "../ui/dialog";
 import InviteUser from "./InviteUser";
-import { setOrganizationField  } from "@/lib/store/slices/organizationSlice";
+import { setOrganization } from "@/lib/store/slices/organizationSlice";
 import UserOnboard from "./UserOnboard";
 
 const Onboard: React.FC = () => {
@@ -118,9 +118,7 @@ useEffect(() => {
         alert(err.error || "Onboarding failed");
       }
       const data = await res.json();
-      dispatch(setOrganizationField({ field: "organization_id", value: data.org.organization_id }));
-      dispatch(setOrganizationField({ field: "org_name", value: data.org.name }));
-      dispatch(setOrganizationField({ field: "subdomain", value: data.org.subdomain }));
+      dispatch(setOrganization(data));
     } catch (err) {
       console.error("Onboard error:", err);
     }
