@@ -13,14 +13,14 @@ const Settings:React.FC = () => {
             <TabsTrigger className='data-[state=active]:bg-ts12 data-[state=active]:text-white cursor-pointer' value="holidays">Holidays</TabsTrigger>
             <TabsTrigger className='data-[state=active]:bg-ts12 data-[state=active]:text-white cursor-pointer' value="leave-types">Leave Types</TabsTrigger>
           </TabsList>
-          <TabsContent value="invite-user" className="w-full my-5 mx-2 grid grid-cols-2 gap-0">
+          <TabsContent value="invite-user" className="w-full my-3 grid grid-cols-2 gap-0">
             <InviteUser />
             <ListingUsers />
           </TabsContent>
-          <TabsContent value="holidays" className="w-full my-5 mx-2">
+          <TabsContent value="holidays" className="w-full my-3">
             <Holidays />
           </TabsContent>
-          <TabsContent value="leave-types" className="w-full my-5 mx-2">
+          <TabsContent value="leave-types" className="w-full my-3">
             <LeaveTypes/>
           </TabsContent>
         </Tabs>

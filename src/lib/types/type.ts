@@ -66,3 +66,17 @@ export interface UserRow {
   created_at: string;
   role_name?: string;
 }
+
+export interface LeaveBalance {
+  leave_balance_id: number;
+  employee_id: string;
+  leave_type_id: number;
+  year: number;
+  total_allocated: number;
+  total_used: number | null;
+  remaining: number | null;
+}
+
+export interface LeaveSliceState {
+  leaveBalance: LeaveBalance[];
+}
