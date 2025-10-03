@@ -20,7 +20,7 @@ export interface Holiday{
   holiday_id : number;
   organization_id : number;
   name : string;
-  holiday_date : Date;
+  holiday_date : string;
   is_recurring : boolean;
 }
 
@@ -40,8 +40,8 @@ export interface Organization {
 
 export type OrganizationState = {
     organization: Organization | null,
-    holiday: Holiday | null,
-    leave_types: LeaveTypes | null
+    holiday: Holiday[],
+    leave_types: LeaveTypes[]
 };
 
 export interface AppUser {

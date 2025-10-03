@@ -64,7 +64,7 @@ const ListingUsers: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4 text-ts12">Organization Users</h2>
       <Table className="max-w-md mx-auto border rounded-xl">
         <TableHeader>
-          <TableRow className="bg-orange-50">
+          <TableRow>
             <TableHead className="text-ts12">Name</TableHead>
             <TableHead className="text-ts12">Joined</TableHead>
           </TableRow>
@@ -82,7 +82,7 @@ const ListingUsers: React.FC = () => {
                 <TableCell className="font-medium flex justify-start gap-2 items-center">
                   {user.first_name} {user.last_name}
                   <Badge
-                    className="flex items-center gap-1 bg-ts12 text-white rounded-full px-1 py-0.5"
+                    className="text-xs flex px-2 py-1 rounded-full bg-orange-50 text-ts12"
                   >
                     <RiShieldUserLine size={14} />{" "}
                     {userRoles.find((role) => role.id === user.role_id)?.role_name}

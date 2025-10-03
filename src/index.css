@@ -149,3 +149,25 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.hide-scroll {
+  overflow-y: auto;
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent;
+}
+
+.hide-scroll::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hide-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+.hide-scroll:hover::-webkit-scrollbar,
+.hide-scroll:active::-webkit-scrollbar {
+  opacity: 1;
+}

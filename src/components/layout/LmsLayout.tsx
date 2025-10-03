@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { setOrganization } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
+import { Toaster } from '../ui/sonner';
 
 const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -116,9 +117,9 @@ return (
           <div className="font-bold text-lg truncate text-orange-200">
             {organization?.name ? (organization.name.split(" ").map((word, index) => (
               <>
-              <span key={index} className="inline-block">
+              <span key={index + word} className="inline-block">
                 {word}
-              </span><br></br>
+              </span><br key={index}></br>
               </>
             ))): "Org"}
           </div>
@@ -169,7 +170,10 @@ return (
           </div>
         </header>
         {/* Main body */}
-        <main className="flex-1 overflow-y-auto p-4"><Outlet /></main>
+        <main className="flex-1 overflow-y-auto p-4 hide-scroll">
+          <Toaster />
+          <Outlet />
+        </main>
       </div>
     </div>
   )
