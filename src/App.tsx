@@ -6,6 +6,7 @@ import OnboardRedirect from './components/onboard/OnboardRedirect'
 import Dashboard from './components/dashboard/Dashboard'
 import Settings from './components/settings/Settings'
 import LmsLayout from './components/layout/LmsLayout'
+import Leave from './components/leave/Leave'
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
       <Route element={<LmsLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/leave" element={<Leave />} />
       </Route>
     </Routes>
   )
