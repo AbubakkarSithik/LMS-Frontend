@@ -3,6 +3,7 @@ import InviteUser from '../onboard/InviteUser'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ListingUsers from './settingsComponents/ListingUsers'
 import Holidays from './settingsComponents/Holidays'
+import LeaveTypes from './settingsComponents/LeaveTypes'
 
 const Settings:React.FC = () => {
   return (
@@ -20,7 +21,7 @@ const Settings:React.FC = () => {
             <Holidays />
           </TabsContent>
           <TabsContent value="leave-types" className="w-full my-5 mx-2">
-            Leave Types
+            <LeaveTypes/>
           </TabsContent>
         </Tabs>
   )
