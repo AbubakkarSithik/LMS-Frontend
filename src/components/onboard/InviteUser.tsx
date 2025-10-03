@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 import { RiUserAddLine, RiCheckLine, RiLoader2Line } from "@remixicon/react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getURL } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface InviteUserProps {
   onFinish?: () => void;
@@ -61,7 +62,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
         setTimeout(() => setSuccess(false), 2000);
       } else {
         const err = await res.json();
-        alert(err.error || "Invite failed");
+        isOnboard ? alert(err.error || "Invite failed"): toast.error(err.error || "Invite failed");
       }
     } catch (err) {
       console.error("Invite error", err);
