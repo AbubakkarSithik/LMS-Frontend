@@ -14,3 +14,10 @@ export const getURL = () => {
   url = url.endsWith("/") ? url : `${url}/`;
   return url;
 };
+export const getBackendURL = (): string => {
+  if (import.meta.env.DEV) {
+    return "http://localhost:4005";
+  } else {
+    return ""; 
+  }
+};

@@ -261,7 +261,7 @@ const LeaveTypes: React.FC = () => {
                 name="name"
                 value={form.name} 
                 onChange={handleChange} 
-                placeholder="e.g., Sick Leave" 
+                placeholder="Sick Leave" 
               />
             </div>
             <div>
