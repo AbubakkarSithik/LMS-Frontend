@@ -6,17 +6,19 @@ import { setLeaveTypes } from '@/lib/store/slices/organizationSlice'
 import { toast } from 'sonner'
 import type { LeaveBalance , LeaveTypes } from '@/lib/types/type'
 import { RiLoader2Line } from '@remixicon/react'
+import { getBackendURL } from '@/lib/utils'
 
 const LeaveBalanceStats : React.FC = () => {
     const dispatch = useDispatch();
     const {leaveBalance} = useSelector((state: RootState) => state.leave);
     const { leave_types } = useSelector((state: RootState) => state.organization);
     const [loading, setLoading] = useState<boolean>(true);
+    const baseURL = getBackendURL();
 
     const fetchLeaveTypes = async () => {
             setLoading(true);
             try {
-              const res = await fetch("http://localhost:4005/organization/leave-types", { credentials: "include" });
+              const res = await fetch(`${baseURL}/organization/leave-types`, { credentials: "include" });
               if (!res.ok) {
                 const err = await res.json().catch(() => null);
                 toast.error(err?.error || "Failed to load leave types");
@@ -34,7 +36,7 @@ const LeaveBalanceStats : React.FC = () => {
         const fetchLeaveBalances = async () => {
         setLoading(true);
         try {
-          const res = await fetch("http://localhost:4005/leave/leave-balances", { credentials: "include" });
+          const res = await fetch(`${baseURL}/leave/leave-balances`, { credentials: "include" });
           if (!res.ok) {
             const err = await res.json().catch(() => null);
             toast.error(err?.error || "Failed to load leave balances");

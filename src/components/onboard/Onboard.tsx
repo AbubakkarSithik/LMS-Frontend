@@ -11,9 +11,10 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Dialog, DialogContent } from "../ui/dialog";
-import InviteUser from "./InviteUser";
+import InviteUser from "./onboardComponents/InviteUser";
 import { setOrganization } from "@/lib/store/slices/organizationSlice";
-import UserOnboard from "./UserOnboard";
+import UserOnboard from "./onboardComponents/UserOnboard";
+import { getBackendURL } from "@/lib/utils";
 
 const Onboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -25,11 +26,12 @@ const Onboard: React.FC = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [successPopup, setSuccessPopup] = useState<boolean>(false);
   const [isAdmin , setIsAdmin] = useState<boolean>(false);
+  const baseURL = getBackendURL();
 
 useEffect(() => {
   const restoreSessionAndCheckOnboard = async () => {
     try {
-      const res = await fetch("http://localhost:4005/auth/restore", {
+      const res = await fetch(`${baseURL}/auth/restore`, {
         credentials: "include",
       });
 
@@ -37,7 +39,7 @@ useEffect(() => {
         const data = await res.json();
         console.log(data);
         dispatch(setSession(data));
-        const onboardRes = await fetch("http://localhost:4005/users/me", {
+        const onboardRes = await fetch(`${baseURL}/users/me`, {
           credentials: "include",
         });
 
@@ -97,7 +99,7 @@ useEffect(() => {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch("http://localhost:4005/onboard", {
+      const res = await fetch(`${baseURL}/onboard`, {
         method: "POST",
         credentials: "include",
         headers: {

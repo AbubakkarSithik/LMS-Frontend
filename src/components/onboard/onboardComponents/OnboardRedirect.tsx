@@ -4,12 +4,14 @@ import { useDispatch } from "react-redux";
 import { setSession, clearSession } from "@/lib/store/slices/authSlice";
 import type { AppDispatch } from "@/lib/store/store";
 import { RiLoader2Line } from "@remixicon/react";
+import { getBackendURL } from "@/lib/utils";
 
 const OnboardRedirect: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [inviteFlow, setInviteFlow] = useState(false);
+  const baseURL = getBackendURL();
 
   useEffect(() => {
     const params = new URLSearchParams(
@@ -42,7 +44,7 @@ const OnboardRedirect: React.FC = () => {
 
     const handleTokenFromUrl = async () => {
       if (accessToken && refreshToken) {
-        const res = await fetch("http://localhost:4005/auth/set-session", {
+        const res = await fetch(`${baseURL}/auth/set-session`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -63,7 +65,7 @@ const OnboardRedirect: React.FC = () => {
     };
 
     const restoreSession = async () => {
-      const res = await fetch("http://localhost:4005/auth/restore", {
+      const res = await fetch(`${baseURL}/auth/restore`, {
         credentials: "include",
       });
       if (res.ok) {

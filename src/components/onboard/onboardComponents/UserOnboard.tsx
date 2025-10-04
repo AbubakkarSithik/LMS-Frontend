@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "@/lib/store/store";
 import { setSession, clearSession } from "@/lib/store/slices/authSlice";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
+import { Button } from "../../ui/button";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
 import { RiArrowLeftLongLine, RiArrowRightSLine, RiEyeLine, RiEyeOffLine, RiLoader2Line, RiLockLine } from "@remixicon/react";
+import { getBackendURL } from "@/lib/utils";
 
 const UserOnboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -16,6 +17,7 @@ const UserOnboard: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [step, setStep] = useState(1);
+  const baseURL = getBackendURL();
   const [form, setForm] = useState({
     password: "",
     first_name: "",
@@ -27,7 +29,7 @@ const UserOnboard: React.FC = () => {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const res = await fetch("http://localhost:4005/auth/restore", {
+        const res = await fetch(`${baseURL}/auth/restore`, {
           credentials: "include",
         });
 
@@ -70,7 +72,7 @@ const UserOnboard: React.FC = () => {
 
   const handleSetPassword = async () => {
     try {
-      const res = await fetch("http://localhost:4005/auth/set-password", {
+      const res = await fetch(`${baseURL}/auth/set-password`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +97,7 @@ const UserOnboard: React.FC = () => {
 
   const handleProfileSubmit = async () => {
     try {
-      const res = await fetch("http://localhost:4005/users/me", {
+      const res = await fetch(`${baseURL}/users/me`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

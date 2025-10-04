@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { RiShieldUserLine } from "@remixicon/react";
 import type { UserRow } from "@/lib/types/type";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getBackendURL } from "@/lib/utils";
 
 const ListingUsers: React.FC = () => {
   const { isAdmin } = useSelector((state: RootState) => state.auth);
@@ -14,13 +15,13 @@ const ListingUsers: React.FC = () => {
   const [users, setUsers] = useState<UserRow[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
-
+  const baseURL = getBackendURL();
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         if (!organization?.organization_id || !isAdmin) return;
         const res = await fetch(
-          `http://localhost:4005/users/org/${organization?.organization_id}`,
+          `${baseURL}/users/org/${organization?.organization_id}`,
           { credentials: "include" , method: "GET"}
         );
         if (res.ok) {

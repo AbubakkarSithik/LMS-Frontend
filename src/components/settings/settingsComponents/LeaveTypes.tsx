@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import type { LeaveTypes as LeaveProps } from "@/lib/types/type";
+import { getBackendURL } from "@/lib/utils";
 
 interface FormState {
   name: string;
@@ -32,7 +33,7 @@ const LeaveTypes: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
-
+  const baseURL = getBackendURL();
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editLeaveTypeId, setEditLeaveTypeId] = useState<number | null>(null);
@@ -41,7 +42,7 @@ const LeaveTypes: React.FC = () => {
   const fetchLeaveTypes = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4005/organization/leave-types", { credentials: "include" });
+      const res = await fetch(`${baseURL}/organization/leave-types`, { credentials: "include" });
       if (!res.ok) {
         const err = await res.json().catch(() => null);
         toast.error(err?.error || "Failed to load leave types");
@@ -103,14 +104,14 @@ const LeaveTypes: React.FC = () => {
     try {
       let res: Response;
       if (isEditing && editLeaveTypeId) {
-        res = await fetch(`http://localhost:4005/organization/leave-types/${editLeaveTypeId}`, {
+        res = await fetch(`${baseURL}/organization/leave-types/${editLeaveTypeId}`, {
           method: "PUT",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(bodyData),
         });
       } else {
-        res = await fetch("http://localhost:4005/organization/leave-types", {
+        res = await fetch(`${baseURL}/organization/leave-types`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -151,7 +152,7 @@ const LeaveTypes: React.FC = () => {
 
     setDeletingId(id);
     try {
-      const res = await fetch(`http://localhost:4005/organization/leave-types/${id}`, { 
+      const res = await fetch(`${baseURL}/organization/leave-types/${id}`, { 
         method: "DELETE", 
         credentials: "include" 
       });

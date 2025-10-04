@@ -8,7 +8,7 @@ import type { RootState, AppDispatch } from "@/lib/store/store";
 import { setEmail, setPassword, resetSignup } from "@/lib/store/slices/signupSlice";
 import { signupSchema } from "@/lib/validation/signupSchema";
 import { useNavigate } from "react-router-dom";
-import { getURL } from "@/lib/utils";
+import { getBackendURL, getURL } from "@/lib/utils";
 
 const SignupStep: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -19,6 +19,7 @@ const SignupStep: React.FC = () => {
   const [emailSent , setEmailSent] = useState<boolean>(false);
   const [loading , setLoading] = useState<boolean>(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const baseURL = getBackendURL();
 
   const validateField = (field: "email" | "password", value: string) => {
     const result = signupSchema.safeParse({ email, password, [field]: value });
@@ -56,7 +57,7 @@ const SignupStep: React.FC = () => {
 
   try {
     setLoading(true);
-    const apiUrl = `http://localhost:4005/auth/${isLogin ? "login" : "signup"}`;
+    const apiUrl = `${baseURL}/auth/${isLogin ? "login" : "signup"}`;
     const response = await fetch(apiUrl, {
       method: "POST",
       headers: {

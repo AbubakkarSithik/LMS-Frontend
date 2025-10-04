@@ -9,6 +9,7 @@ import { setOrganization } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
 import { Toaster } from '../ui/sonner';
+import { getBackendURL } from '@/lib/utils';
 
 const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
@@ -18,18 +19,19 @@ const LmsLayout: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
+  const baseURL = getBackendURL();
 
   useEffect(() => {
     const restoreSessionAndCheckOnboard = async () => {
       try {
-        const res = await fetch("http://localhost:4005/auth/restore", {
+        const res = await fetch(`${baseURL}/auth/restore`, {
           credentials: "include",
         });
   
         if (res.ok) {
           const { session } = await res.json();
           dispatch(setSession(session));
-          const onboardRes = await fetch("http://localhost:4005/users/me", {
+          const onboardRes = await fetch(`${baseURL}/users/me`, {
             credentials: "include",
           });
   
@@ -42,7 +44,7 @@ const LmsLayout: React.FC = () => {
                 dispatch(setIsAdmin(true));
               }
           }
-          const organizationRes = await fetch(`http://localhost:4005/organization/org`,{
+          const organizationRes = await fetch(`${baseURL}/organization/org`, {
               credentials: "include",
               method: "GET",
             });
@@ -69,7 +71,7 @@ const LmsLayout: React.FC = () => {
 const handleLogout = async () => {
     setLoggingOut(true);
       try {
-        const res = await fetch("http://localhost:4005/auth/logout", {
+        const res = await fetch(`${baseURL}/auth/logout`, {
           credentials: "include",
           method: "POST",
         });

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/lib/store/store";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+import { Label } from "../../ui/label";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { RiUserAddLine, RiCheckLine, RiLoader2Line } from "@remixicon/react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { getURL } from "@/lib/utils";
+import { getBackendURL, getURL } from "@/lib/utils";
 import { toast } from "sonner";
 
 interface InviteUserProps {
@@ -21,12 +21,13 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
   const [roles, setRoles] = useState<{ role_id: number; role_name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const baseURL = getBackendURL();
   const isOnboard: boolean = window.location.pathname === "/onboard";
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const res = await fetch("http://localhost:4005/invite/roles", {
+        const res = await fetch(`${baseURL}/invite/roles`, {
           credentials: "include",
         });
         if (res.ok) {
@@ -43,7 +44,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
   const handleInvite = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4005/invite/invite-user", {
+      const res = await fetch(`${baseURL}/invite/invite-user`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

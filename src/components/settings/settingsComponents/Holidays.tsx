@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import { getBackendURL } from "@/lib/utils";
 
 const Holidays: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const Holidays: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editHolidayId, setEditHolidayId] = useState<number | null>(null);
+  const baseURL = getBackendURL();
 
   const [form, setForm] = useState<{
     name: string;
@@ -50,7 +52,7 @@ const Holidays: React.FC = () => {
     }
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:4005/organization/holidays", { credentials: "include" });
+      const res = await fetch(`${baseURL}/organization/holidays`, { credentials: "include" });
       if (!res.ok) {
         const err = await res.json().catch(() => null);
         toast.error(err?.error || "Failed to load holidays");
@@ -98,7 +100,7 @@ const Holidays: React.FC = () => {
     setSaving(true);
     try {
       if (isEditing && editHolidayId) {
-        const res = await fetch(`http://localhost:4005/organization/holidays/${editHolidayId}`, {
+        const res = await fetch(`${baseURL}/organization/holidays/${editHolidayId}`, {
           method: "PUT",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -120,7 +122,7 @@ const Holidays: React.FC = () => {
         toast.success("Holiday updated");
       } else {
         // POST
-        const res = await fetch("http://localhost:4005/organization/holidays", {
+        const res = await fetch(`${baseURL}/organization/holidays`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -155,7 +157,7 @@ const Holidays: React.FC = () => {
     if (!confirm) return;
     setDeletingId(id);
     try {
-      const res = await fetch(`http://localhost:4005/organization/holidays/${id}`, {
+      const res = await fetch(`${baseURL}/organization/holidays/${id}`, {
         method: "DELETE",
         credentials: "include",
       });

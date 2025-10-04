@@ -1,5 +1,5 @@
 import React from 'react'
-import InviteUser from '../onboard/InviteUser'
+import InviteUser from '../onboard/onboardComponents/InviteUser'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ListingUsers from './settingsComponents/ListingUsers'
 import Holidays from './settingsComponents/Holidays'
