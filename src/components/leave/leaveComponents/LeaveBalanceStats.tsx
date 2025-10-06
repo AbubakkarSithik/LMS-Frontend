@@ -20,7 +20,6 @@ const LeaveBalanceStats: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const baseURL = getBackendURL();
 
-  // --- Fetch Leave Types ---
   const fetchLeaveTypes = async () => {
     setLoading(true);
     try {
@@ -40,7 +39,6 @@ const LeaveBalanceStats: React.FC = () => {
     }
   };
 
-  // --- Fetch Leave Balances ---
   const fetchLeaveBalances = async () => {
     setLoading(true);
     try {
@@ -113,7 +111,7 @@ const LeaveBalanceStats: React.FC = () => {
       },
       title: {
         display: true,
-        text: "Leave Stats",
+        text: "Leave balances",
         color: "#ff4d00",
         font: { size: 18 },
       },
@@ -140,7 +138,7 @@ const LeaveBalanceStats: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-transparent max-w-[500px] backdrop-blur-md border border-gray-300 shadow-md text-white">
+    <div className="p-6 bg-transparent max-h-[400px] flex justify-center backdrop-blur-md shadow-md text-white">
       {loading ? (
         <div className="flex items-center justify-center py-8">
           <RiLoader2Line className="animate-spin text-ts12" size={26} />
