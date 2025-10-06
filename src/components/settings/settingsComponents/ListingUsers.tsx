@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector , useDispatch } from "react-redux";
 import type { RootState } from "@/lib/store/store";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RiShieldUserLine } from "@remixicon/react";
-import type { UserRow } from "@/lib/types/type";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getBackendURL } from "@/lib/utils";
+import { setUsers } from "@/lib/store/slices/organizationSlice";
 
 const ListingUsers: React.FC = () => {
+  const dispatch = useDispatch();
   const { isAdmin } = useSelector((state: RootState) => state.auth);
-  const { organization } = useSelector((state: RootState) => state.organization);
-  const [users, setUsers] = useState<UserRow[]>([]);
+  const { organization , users } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
   const baseURL = getBackendURL();
@@ -26,7 +26,7 @@ const ListingUsers: React.FC = () => {
         );
         if (res.ok) {
           const data = await res.json();
-          setUsers(data);
+          dispatch(setUsers(data));
         } else {
           console.error("Failed to fetch users");
         }

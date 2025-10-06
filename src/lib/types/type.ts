@@ -37,11 +37,21 @@ export interface Organization {
   name: string;
   subdomain: string;
 }
+export interface UserRow {
+  id: string;
+  first_name: string;
+  last_name: string;
+  role_id: number;
+  created_at: string;
+  username: string;
+  email: string;
+}
 
 export type OrganizationState = {
     organization: Organization | null,
     holiday: Holiday[],
     leave_types: LeaveTypes[]
+    users: UserRow[]
 };
 
 export interface AppUser {
@@ -58,15 +68,6 @@ export interface AuthState {
   isAdmin: boolean | null;
 }
 
-export interface UserRow {
-  id: string;
-  first_name: string;
-  last_name: string;
-  role_id: number;
-  created_at: string;
-  role_name?: string;
-}
-
 export interface LeaveBalance {
   leave_balance_id: number;
   employee_id: string;
@@ -79,4 +80,10 @@ export interface LeaveBalance {
 
 export interface LeaveSliceState {
   leaveBalance: LeaveBalance[];
+}
+export interface Relation {
+  employee_id?: string;
+  manager_id?: string;
+  hr_id?: string;
+  admin_id?: string;
 }
