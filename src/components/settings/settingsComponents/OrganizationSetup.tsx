@@ -20,10 +20,10 @@ const relationConfig: Record<string, string[]> = {
 interface SavedRelation {
   id: string;
   type: string;
-  employee?: string;
-  manager?: string;
-  hr?: string;
-  admin?: string;
+  employee_id?: string;
+  manager_id?: string;
+  hr_id?: string;
+  admin_id?: string;
 }
 
 const OrganizationSetup: React.FC = () => {
@@ -107,7 +107,7 @@ const OrganizationSetup: React.FC = () => {
       } else {
         toast.success("Saved successfully!");
         setFormData({});
-        fetchRelations(); // Refresh list after save
+        fetchRelations(); 
       }
     } catch (err) {
       console.error("Save relation error:", err);
@@ -119,10 +119,11 @@ const OrganizationSetup: React.FC = () => {
 
 
   const deleteRelation = async (rel: SavedRelation) => {
-    const keyField = rel.type === "employee-manager" ? rel.employee :
-                     rel.type === "hr-admin" ? rel.hr : rel.manager;
-    if (!keyField) return;
-
+    const keyField = rel.type === "employee-manager" ? rel.employee_id :
+                     rel.type === "hr-admin" ? rel.hr_id : rel.manager_id;
+    if (!keyField) {toast.error("Failed to delete relation"); return null};
+    const confirm = window.confirm("Are you sure you want to delete this relation?");
+    if (!confirm) return;
     setLoading(true);
     try {
       const res = await fetch(`${baseURL}/employee/${rel.type}/${keyField}`, {
@@ -135,7 +136,7 @@ const OrganizationSetup: React.FC = () => {
         toast.error(err?.error || "Failed to delete relation");
       } else {
         toast.success("Deleted successfully!");
-        fetchRelations(); // Refresh list after delete
+        fetchRelations(); 
       }
     } catch (err) {
       console.error("Delete relation error:", err);
@@ -205,9 +206,8 @@ const OrganizationSetup: React.FC = () => {
           </div>
         </CardContent>
       </Card>
-      
+
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-6 flex flex-col gap-2">
-        {savedRelations.length > 0 && (
           <Card className="shadow-none border-none bg-transparent">
             <CardHeader>
               <CardTitle className="text-2xl font-bold mb-2 text-ts12">Employee Relations</CardTitle>
@@ -262,12 +262,11 @@ const OrganizationSetup: React.FC = () => {
                 </div>
             ) : (
                 <div className="py-8 text-center text-gray-500">
-                No relations found. Click <strong>Add Relation</strong> to create one.
+                No relations found. Go <strong>create one</strong>.
                 </div>
             )}
             </CardContent>
           </Card>
-        )}
       </motion.div>
     </div>
   );
