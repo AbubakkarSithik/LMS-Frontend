@@ -73,6 +73,9 @@ export interface AuthState {
   session: Session | null;
   appUser: AppUser | null;
   isAdmin: boolean | null;
+  isManager: boolean | null;
+  isHR: boolean | null;
+  isEmployee: boolean | null;
 }
 
 export interface LeaveBalance {
