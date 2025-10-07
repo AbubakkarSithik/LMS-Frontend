@@ -23,7 +23,7 @@ const ROLE_IDS = {
 const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
   const baseURL = getBackendURL();
   const { roles, users } = useSelector((s: RootState) => s.organization);
-  const { isAdmin } = useSelector((s: RootState) => s.auth);
+  const { isAdmin , isHR } = useSelector((s: RootState) => s.auth);
   const [roleId, setRoleId] = useState<string>(String(user?.role_id ?? ""));
   const [local, setLocal] = useState<UserRow | null>(null);
   const [savingInfo, setSavingInfo] = useState(false);
@@ -87,7 +87,7 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
         organization_id: local.organization_id,
       };
 
-      if (isAdmin && typeof local.role_id !== "undefined") {
+      if (isAdmin) {
         payload.role_id = Number(roleId);
       }
 
@@ -262,7 +262,7 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
         </CardContent>
       </Card>
 
-      {!editingUserIsAdmin && (
+      {!editingUserIsAdmin && !isHR && (
         <Card>
           <CardHeader>
             <CardTitle>Relations / Reporting</CardTitle>

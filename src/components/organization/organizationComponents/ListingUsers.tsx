@@ -15,7 +15,7 @@ import UserProfileSetup from "./UserProfileSetup";
 
 const ListingUsers: React.FC = () => {
   const dispatch = useDispatch();
-  const { isAdmin } = useSelector((state: RootState) => state.auth);
+  const { isAdmin , isHR } = useSelector((state: RootState) => state.auth);
   const { organization , users } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const [openDialog , setOpenDialog] = useState<boolean>(false);
@@ -26,7 +26,7 @@ const ListingUsers: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        if (!organization?.organization_id || !isAdmin) return;
+        if (!organization?.organization_id || (!isAdmin && !isHR)) return null;
         const res = await fetch(
           `${baseURL}/users/org/${organization?.organization_id}`,
           { credentials: "include" , method: "GET"}
@@ -45,7 +45,7 @@ const ListingUsers: React.FC = () => {
     };
 
     fetchUsers();
-  }, [organization?.organization_id, isAdmin]);
+  }, [organization?.organization_id, isAdmin , isHR]);
 
   const handleEditClick = (user: UserRow) => {
     setEditingUser(user);
