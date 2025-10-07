@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
 import { setSession, clearSession  , setIsAdmin} from "@/lib/store/slices/authSlice";
 import { setAppUser } from "@/lib/store/slices/authSlice";
-import { RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiSettings3Line, RiTeamLine, RiUser3Line } from '@remixicon/react';
+import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
 import { setOrganization } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
@@ -131,7 +131,7 @@ return (
           <NavItem icon={<RiDashboardLine size={20} />} label="Dashboard" to="/dashboard" />
           <NavItem icon={<RiTeamLine size={20} />} label="Leave" to="/leave" />
           {isAdmin && (
-              <NavItem icon={<RiSettings3Line size={20} />} label="Settings" to="/settings" />
+              <NavItem icon={<RiBuildingLine size={20} />} label="Organization" to="/organization" />
           )}
         </nav>
       </motion.aside>

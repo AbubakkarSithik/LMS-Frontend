@@ -1,9 +1,12 @@
 import React from 'react'
+import Holidays from './leaveComponents/Holidays'
+import LeaveTypes from './leaveComponents/LeaveTypes'
 
 const Leave: React.FC = () => {
   return (
     <div>
-      Leave Request page
+      <Holidays />
+      <LeaveTypes />
     </div>
   )
 }

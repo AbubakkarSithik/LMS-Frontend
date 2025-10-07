@@ -4,7 +4,7 @@ import Onboard from './components/onboard/Onboard'
 import SignupLayout from './components/layout/SignupLayout'
 import OnboardRedirect from './components/onboard/onboardComponents/OnboardRedirect'
 import Dashboard from './components/dashboard/Dashboard'
-import Settings from './components/settings/Settings'
+import Organization from './components/organization/Organization'
 import LmsLayout from './components/layout/LmsLayout'
 import Leave from './components/leave/Leave'
 
@@ -17,7 +17,7 @@ function App() {
       <Route path="/onboard" element={<Onboard />} />
       <Route element={<LmsLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route path="/organization" element={<Organization />} />
         <Route path="/leave" element={<Leave />} />
       </Route>
     </Routes>
