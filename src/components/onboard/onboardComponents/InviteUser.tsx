@@ -84,7 +84,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
       <h2 className={`text-2xl font-semibold text-ts12 mb-6 ${isOnboard && "text-left"}`}>
         Let&apos;s invite your team
       </h2>
-      <div className={`space-y-4 ${!isOnboard && "max-w-sm mx-auto"}`}>
+      <div className={`space-y-4`}>
         <div>
           <Label className="block text-gray-700 text-left mb-2">User Email</Label>
           <Input
@@ -115,7 +115,7 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
         </div>
       </div>
 
-      <div className={`flex justify-between items-center gap-4 mt-6 ${!isOnboard && "max-w-sm mx-auto"}`}>
+      <div className={`flex justify-between items-center gap-4 mt-6`}>
         <Button
           onClick={handleInvite}
           disabled={loading}
