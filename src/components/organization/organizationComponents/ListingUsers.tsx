@@ -15,13 +15,12 @@ import UserProfileSetup from "./UserProfileSetup";
 
 const ListingUsers: React.FC = () => {
   const dispatch = useDispatch();
-  const { isAdmin , isHR } = useSelector((state: RootState) => state.auth);
-  const { organization , users } = useSelector((state: RootState) => state.organization);
+  const { isAdmin , isHR , appUser } = useSelector((state: RootState) => state.auth);
+  const { organization , users , roles} = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const [openDialog , setOpenDialog] = useState<boolean>(false);
   const [hoveredUserId, setHoveredUserId] = useState<string | null>(null);
   const [editingUser, setEditingUser] = useState<UserRow | null>(null);  
-  const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
   const baseURL = getBackendURL();
   useEffect(() => {
     const fetchUsers = async () => {
@@ -86,7 +85,7 @@ const ListingUsers: React.FC = () => {
                   onMouseLeave={() => setHoveredUserId(null)}
                   className="relative flex items-center justify-between gap-4 p-3 rounded-lg border border-gray-100 bg-white shadow-sm group"
                 >
-                  <div className="flex justify-center items-start gap-3">
+                  <div className="flex justify-center items-start gap-2">
                     <div className="flex flex-col justify-center items-start gap-1">
                       <span className="font-semibold text-black">
                         {user.first_name} {user.last_name}
@@ -99,9 +98,13 @@ const ListingUsers: React.FC = () => {
 
                     <Badge className="text-xs flex items-center gap-1 px-2 py-1 rounded bg-orange-50 text-ts12">
                       <RiShieldUserLine size={14} />
-                      {userRoles.find((role) => role.id === user.role_id)
+                      {roles.find((role) => role.role_id === user.role_id)
                         ?.role_name || "User"}
                     </Badge>
+
+                    { appUser?.id === user.id && 
+                        <Badge className="text-xs px-2 py-1 rounded-full bg-ts12 text-white"> You </Badge>
+                    }
                   </div>
                   <motion.div
                     initial={{ opacity: 0 }}
