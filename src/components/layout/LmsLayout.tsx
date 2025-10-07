@@ -1,11 +1,11 @@
 import React ,{useEffect , useState}  from 'react'
 import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
-import { setSession, clearSession  , setIsAdmin} from "@/lib/store/slices/authSlice";
+import { setSession, clearSession  , setIsAdmin  , setIsManager , setIsHR , setIsEmployee} from "@/lib/store/slices/authSlice";
 import { setAppUser } from "@/lib/store/slices/authSlice";
-import { RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiSettings3Line, RiTeamLine, RiUser3Line } from '@remixicon/react';
+import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
-import { setOrganization } from '@/lib/store/slices/organizationSlice';
+import { setOrganization , setRoles } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
 import { Toaster } from '../ui/sonner';
@@ -14,8 +14,8 @@ import { getBackendURL } from '@/lib/utils';
 const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { session , appUser , isAdmin } = useSelector((state: RootState) => state.auth);
-  const { organization } = useSelector((state: RootState) => state.organization);
+  const { session , appUser , isAdmin , isHR} = useSelector((state: RootState) => state.auth);
+  const { organization  } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
@@ -38,10 +38,23 @@ const LmsLayout: React.FC = () => {
           if (onboardRes.ok) {
             const appUser = await onboardRes.json();
             dispatch(setAppUser(appUser));
-            if (appUser.organization_id && appUser.role_id !== 1001) {
-                dispatch(setIsAdmin(false));
-            }else{
-                dispatch(setIsAdmin(true));
+           if (appUser.organization_id) {
+                switch (appUser.role_id) {
+                  case 1001:
+                    dispatch(setIsAdmin(true));
+                    break;
+                  case 1002:
+                    dispatch(setIsHR(true));
+                    break;
+                  case 1003:
+                    dispatch(setIsManager(true));
+                    break;
+                  case 1004:
+                    dispatch(setIsEmployee(true));
+                    break;
+                  default:
+                    break;
+                }
               }
           }
           const organizationRes = await fetch(`${baseURL}/organization/org`, {
@@ -64,8 +77,23 @@ const LmsLayout: React.FC = () => {
         setLoading(false);
       }
     };
+
+    const fetchRoles = async () => {
+        try {
+          const res = await fetch(`${baseURL}/invite/roles`, {
+            credentials: "include",
+          });
+          if (res.ok) {
+            const data = await res.json();
+            dispatch(setRoles(data));
+          }
+        } catch (err) {
+          console.error("Failed to load roles", err);
+        }
+      };
   
     restoreSessionAndCheckOnboard();
+    fetchRoles();
   }, [dispatch]);
 
 const handleLogout = async () => {
@@ -130,8 +158,8 @@ return (
         <nav className="flex flex-col gap-3 text-sm">
           <NavItem icon={<RiDashboardLine size={20} />} label="Dashboard" to="/dashboard" />
           <NavItem icon={<RiTeamLine size={20} />} label="Leave" to="/leave" />
-          {isAdmin && (
-              <NavItem icon={<RiSettings3Line size={20} />} label="Settings" to="/settings" />
+          { (isAdmin || isHR) &&  (
+              <NavItem icon={<RiBuildingLine size={20} />} label="Organization" to="/organization" />
           )}
         </nav>
       </motion.aside>

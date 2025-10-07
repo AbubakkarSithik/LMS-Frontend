@@ -5,7 +5,10 @@ import type { AuthState , AppUser } from "@/lib/types/type";
 const initialState: AuthState = {
   session: null,
   appUser: null,
-  isAdmin: null
+  isAdmin: null,
+  isManager: null,
+  isHR: null,
+  isEmployee: null
 };
 
 const authSlice = createSlice({
@@ -21,13 +24,18 @@ const authSlice = createSlice({
     setIsAdmin: (state, action: PayloadAction<boolean | null>) => {
       state.isAdmin = action.payload;
     },
-    clearSession: (state) => {
-      state.session = null;
-      state.appUser = null;
-      state.isAdmin = null;
+    setIsManager: (state, action: PayloadAction<boolean | null>) => {
+      state.isManager = action.payload;
     },
+    setIsHR: (state, action: PayloadAction<boolean | null>) => {
+      state.isHR = action.payload;
+    },
+    setIsEmployee: (state, action: PayloadAction<boolean | null>) => {
+      state.isEmployee = action.payload;
+    },
+    clearSession: () => initialState,
   },
 });
 
-export const { setSession, clearSession , setAppUser , setIsAdmin} = authSlice.actions;
+export const { setSession, clearSession , setAppUser , setIsAdmin , setIsManager , setIsHR , setIsEmployee} = authSlice.actions;
 export default authSlice.reducer;
