@@ -10,7 +10,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { getBackendURL } from "@/lib/utils";
 
@@ -245,7 +245,7 @@ const Holidays: React.FC = () => {
           <DialogHeader>
             <DialogTitle>{isEditing ? "Edit Holiday" : "Create Holiday"}</DialogTitle>
           </DialogHeader>
-
+          <DialogDescription className="sr-only"></DialogDescription>
           <div className="space-y-4 mt-2">
             <div>
               <Label htmlFor="name" className="mb-2 text-ts12">Name</Label>

@@ -1,13 +1,12 @@
 import React, { useEffect , useState} from 'react'
 import InviteUser from '../onboard/onboardComponents/InviteUser'
 import ListingUsers from './organizationComponents/ListingUsers'
-import OrganizationSetup from './organizationComponents/OrganizationSetup'
 import type { RootState } from '@/lib/store/store'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
 import { RiUserAddLine } from '@remixicon/react'
-import { Dialog, DialogContent } from '../ui/dialog'
+import { Dialog, DialogContent, DialogDescription , DialogTitle} from '../ui/dialog'
 
 const Organization:React.FC = () => {
   const navigate = useNavigate();
@@ -29,12 +28,11 @@ const Organization:React.FC = () => {
               <RiUserAddLine size={20} /> Invite
           </Button>
         </div>
-
             <ListingUsers />
-            <OrganizationSetup />
-
-            <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen} aria-describedby="dialog-invite-user">
+            <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen} >
                     <DialogContent showCloseButton={true}>
+                          <DialogTitle className="sr-only"></DialogTitle>
+                          <DialogDescription className="sr-only"></DialogDescription>
                           <InviteUser />
                     </DialogContent>
             </Dialog>

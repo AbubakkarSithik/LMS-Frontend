@@ -5,7 +5,7 @@ import { setSession, clearSession  , setIsAdmin} from "@/lib/store/slices/authSl
 import { setAppUser } from "@/lib/store/slices/authSlice";
 import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
-import { setOrganization } from '@/lib/store/slices/organizationSlice';
+import { setOrganization , setRoles } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
 import { Toaster } from '../ui/sonner';
@@ -15,7 +15,7 @@ const LmsLayout: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { session , appUser , isAdmin } = useSelector((state: RootState) => state.auth);
-  const { organization } = useSelector((state: RootState) => state.organization);
+  const { organization  } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
   const [profileOpen, setProfileOpen] = useState<boolean>(false);
   const [loggingOut, setLoggingOut] = useState<boolean>(false);
@@ -64,8 +64,23 @@ const LmsLayout: React.FC = () => {
         setLoading(false);
       }
     };
+
+    const fetchRoles = async () => {
+        try {
+          const res = await fetch(`${baseURL}/invite/roles`, {
+            credentials: "include",
+          });
+          if (res.ok) {
+            const data = await res.json();
+            dispatch(setRoles(data));
+          }
+        } catch (err) {
+          console.error("Failed to load roles", err);
+        }
+      };
   
     restoreSessionAndCheckOnboard();
+    fetchRoles();
   }, [dispatch]);
 
 const handleLogout = async () => {

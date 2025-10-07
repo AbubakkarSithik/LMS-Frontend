@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "@/lib/store/store";
 import { Label } from "../../ui/label";
 import { Input } from "../../ui/input";
@@ -9,16 +9,17 @@ import { RiUserAddLine, RiCheckLine, RiLoader2Line } from "@remixicon/react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { getBackendURL, getURL } from "@/lib/utils";
 import { toast } from "sonner";
+import { setRoles } from "@/lib/store/slices/organizationSlice";
 
 interface InviteUserProps {
   onFinish?: () => void;
 }
 
 const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
-  const  { organization } = useSelector((state: RootState) => state.organization);
+  const dispatch = useDispatch();
+  const  { organization , roles } = useSelector((state: RootState) => state.organization);
   const [email, setEmail] = useState("");
   const [roleId, setRoleId] = useState("");
-  const [roles, setRoles] = useState<{ role_id: number; role_name: string }[]>([]);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const baseURL = getBackendURL();
@@ -32,13 +33,13 @@ const InviteUser: React.FC<InviteUserProps> = ({ onFinish }) => {
         });
         if (res.ok) {
           const data = await res.json();
-          setRoles(data);
+          dispatch(setRoles(data));
         }
       } catch (err) {
         console.error("Failed to load roles", err);
       }
     };
-    fetchRoles();
+    isOnboard && fetchRoles();
   }, []);
 
   const handleInvite = async () => {

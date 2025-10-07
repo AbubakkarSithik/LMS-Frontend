@@ -45,6 +45,12 @@ export interface UserRow {
   created_at: string;
   username: string;
   email: string;
+  organization_id?: number
+}
+
+export interface Roles {
+  role_id: number;
+  role_name: string;
 }
 
 export type OrganizationState = {
@@ -52,6 +58,7 @@ export type OrganizationState = {
     holiday: Holiday[],
     leave_types: LeaveTypes[]
     users: UserRow[]
+    roles: Roles[];
 };
 
 export interface AppUser {

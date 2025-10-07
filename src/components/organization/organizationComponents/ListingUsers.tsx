@@ -3,17 +3,24 @@ import { useSelector , useDispatch } from "react-redux";
 import type { RootState } from "@/lib/store/store";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { RiLoader2Line, RiShieldUserLine } from "@remixicon/react";
+import { RiEdit2Line, RiLoader2Line, RiShieldUserLine } from "@remixicon/react";
 import { getBackendURL } from "@/lib/utils";
 import { setUsers } from "@/lib/store/slices/organizationSlice";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Dialog , DialogContent , DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import type { UserRow } from "@/lib/types/type";
+import UserProfileSetup from "./UserProfileSetup";
 
 const ListingUsers: React.FC = () => {
   const dispatch = useDispatch();
   const { isAdmin } = useSelector((state: RootState) => state.auth);
   const { organization , users } = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState<boolean>(true);
+  const [openDialog , setOpenDialog] = useState<boolean>(false);
+  const [hoveredUserId, setHoveredUserId] = useState<string | null>(null);
+  const [editingUser, setEditingUser] = useState<UserRow | null>(null);  
   const userRoles = [{ role_name :"Admin" , id: 1001}, { role_name :"HR" , id: 1002}, { role_name :"Manager" , id: 1003} , { role_name :"Employee" , id: 1004}];
   const baseURL = getBackendURL();
   useEffect(() => {
@@ -39,6 +46,11 @@ const ListingUsers: React.FC = () => {
 
     fetchUsers();
   }, [organization?.organization_id, isAdmin]);
+
+  const handleEditClick = (user: UserRow) => {
+    setEditingUser(user);
+    setOpenDialog(true);
+  };
 
   return (
     <motion.div
@@ -70,10 +82,11 @@ const ListingUsers: React.FC = () => {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -6 }}
-                  className="flex items-center justify-between gap-4 p-3 rounded-lg border border-gray-100 bg-white shadow-sm"
+                  onMouseEnter={() => setHoveredUserId(user.id)}
+                  onMouseLeave={() => setHoveredUserId(null)}
+                  className="relative flex items-center justify-between gap-4 p-3 rounded-lg border border-gray-100 bg-white shadow-sm group"
                 >
                   <div className="flex justify-center items-start gap-3">
-                    {/* User Info */}
                     <div className="flex flex-col justify-center items-start gap-1">
                       <span className="font-semibold text-black">
                         {user.first_name} {user.last_name}
@@ -84,18 +97,29 @@ const ListingUsers: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Role Badge */}
                     <Badge className="text-xs flex items-center gap-1 px-2 py-1 rounded bg-orange-50 text-ts12">
                       <RiShieldUserLine size={14} />
                       {userRoles.find((role) => role.id === user.role_id)
                         ?.role_name || "User"}
                     </Badge>
                   </div>
-
-                  {/* Right-side actions (future-proof if needed) */}
-                  <div className="flex items-center gap-2">
-                    {/* You can later add actions like edit or deactivate here */}
-                  </div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{
+                      opacity: hoveredUserId === user.id ? 1 : 0,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                  >
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {handleEditClick(user)} }
+                      className="flex items-center gap-1 cursor-pointer border-none hover:bg-orange-50"
+                    >
+                      <RiEdit2Line size={14} /> Edit
+                    </Button>
+                  </motion.div>
                 </motion.div>
               ))}
             </div>
@@ -106,6 +130,14 @@ const ListingUsers: React.FC = () => {
           )}
         </CardContent>
       </Card>
+     
+      <Dialog open={openDialog} onOpenChange={setOpenDialog} >
+        <DialogContent className="max-w-md">
+          <DialogTitle className="sr-only"></DialogTitle>
+          <DialogDescription className="sr-only"></DialogDescription>
+          <UserProfileSetup user={editingUser} />
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 };
