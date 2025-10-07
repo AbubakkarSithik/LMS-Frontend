@@ -17,6 +17,7 @@ import { getBackendURL } from "@/lib/utils";
 const Holidays: React.FC = () => {
   const dispatch = useDispatch();
   const { organization, holiday } = useSelector((state: RootState) => state.organization);
+  const { isAdmin } = useSelector((state: RootState) => state.auth);
   const orgId = organization?.organization_id;
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
@@ -180,7 +181,7 @@ const Holidays: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      { isAdmin && <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-black">Holidays</h2>
         <div className="flex items-center gap-2">
           <Button onClick={openCreateModal} className="cursor-pointer bg-gradient-to-r from-ts12 via-orange-400 to-orange-700 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white">
@@ -188,7 +189,7 @@ const Holidays: React.FC = () => {
             Add Holiday
           </Button>
         </div>
-      </div>
+      </div>}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -220,14 +221,14 @@ const Holidays: React.FC = () => {
                     {h.is_recurring && <span className="text-xs inline-block px-2 py-1 rounded bg-orange-50 text-ts12">Recurring</span>}
                   </div>
 
-                  <div className="flex items-center gap-2">
+                 { isAdmin && <div className="flex items-center gap-2">
                     <Button variant="ghost" className="cursor-pointer" onClick={() => openEditModal(h)} aria-label="Edit holiday">
                       <RiEditLine />
                     </Button>
                     <Button variant="ghost" className="cursor-pointer" onClick={() => handleDelete(h.holiday_id)} aria-label="Delete holiday" disabled={deletingId === h.holiday_id}>
                       {deletingId === h.holiday_id ? <RiLoader2Line className="animate-spin" /> : <RiDeleteBin6Line />}
                     </Button>
-                  </div>
+                  </div>}
                 </motion.div>
               ))}
             </div>
@@ -239,7 +240,7 @@ const Holidays: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Dialog open={openModal} onOpenChange={setOpenModal} aria-describedby="dialog-create-update-holiday">
+     { isAdmin && <Dialog open={openModal} onOpenChange={setOpenModal} aria-describedby="dialog-create-update-holiday">
         <DialogContent showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>{isEditing ? "Edit Holiday" : "Create Holiday"}</DialogTitle>
@@ -269,7 +270,7 @@ const Holidays: React.FC = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>}
     </div>
   );
 };

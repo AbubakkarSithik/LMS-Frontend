@@ -29,7 +29,7 @@ const initialFormState: FormState = {
 const LeaveTypes: React.FC = () => {
   const dispatch = useDispatch();
   const { organization, leave_types } = useSelector((state: RootState) => state.organization);
-
+  const { isAdmin } = useSelector((state: RootState) => state.auth);
   const [loading, setLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
@@ -176,7 +176,7 @@ const LeaveTypes: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      { isAdmin && <div className="flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-black">Leave Types</h2>
         <div className="flex items-center gap-2">
           <Button 
@@ -187,7 +187,7 @@ const LeaveTypes: React.FC = () => {
             Add Leave Type
           </Button>
         </div>
-      </div>
+      </div>}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -219,7 +219,7 @@ const LeaveTypes: React.FC = () => {
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  { isAdmin && <div className="flex items-center gap-2">
                     <Button 
                       variant="ghost" 
                       className="cursor-pointer" 
@@ -237,7 +237,7 @@ const LeaveTypes: React.FC = () => {
                     >
                       {deletingId === lt.leave_type_id ? <RiLoader2Line className="animate-spin" /> : <RiDeleteBin6Line />}
                     </Button>
-                  </div>
+                  </div>}
                 </motion.div>
               ))}
             </div>
@@ -249,7 +249,7 @@ const LeaveTypes: React.FC = () => {
         </CardContent>
       </Card>
 
-      <Dialog open={openModal} onOpenChange={setOpenModal} aria-describedby="dialog-create-update-leave-type">
+     { isAdmin && <Dialog open={openModal} onOpenChange={setOpenModal} aria-describedby="dialog-create-update-leave-type">
         <DialogContent showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>{isEditing ? "Edit Leave Type" : "Create Leave Type"}</DialogTitle>
@@ -300,7 +300,7 @@ const LeaveTypes: React.FC = () => {
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+      </Dialog>}
     </div>
   );
 };
