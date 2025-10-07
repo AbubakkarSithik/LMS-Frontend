@@ -131,8 +131,8 @@ const ListingUsers: React.FC = () => {
         </CardContent>
       </Card>
      
-      <Dialog open={openDialog} onOpenChange={setOpenDialog} >
-        <DialogContent className="max-w-md">
+      <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+        <DialogContent showCloseButton={true} className="w-full">
           <DialogTitle className="sr-only"></DialogTitle>
           <DialogDescription className="sr-only"></DialogDescription>
           <UserProfileSetup user={editingUser} />
