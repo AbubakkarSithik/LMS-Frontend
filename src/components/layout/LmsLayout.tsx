@@ -5,7 +5,7 @@ import { setSession, clearSession  , setIsAdmin  , setIsManager , setIsHR , setI
 import { setAppUser } from "@/lib/store/slices/authSlice";
 import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
-import { setOrganization , setRoles } from '@/lib/store/slices/organizationSlice';
+import { setOrganization , setRoles , setRelations } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
 import NavItem from '../ui/NavItem';
 import { Toaster } from '../ui/sonner';
@@ -91,9 +91,37 @@ const LmsLayout: React.FC = () => {
           console.error("Failed to load roles", err);
         }
       };
+
+  const fetchRelations = async () => {
+  try {
+    const res = await fetch(`${baseURL}/employee/relations/all`, {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      console.error("Failed to fetch organization relations");
+      return;
+    }
+    const data = await res.json();
+    if (data?.relations) {
+      dispatch(setRelations(data.relations));
+    } else {
+      dispatch(
+        setRelations({
+          "employee-manager": [],
+          "manager-hr": [],
+        })
+      );
+    }
+  } catch (err: any) {
+    console.error("Error fetching relations:", err);
+  }
+};
   
     restoreSessionAndCheckOnboard();
     fetchRoles();
+    fetchRelations();
   }, [dispatch]);
 
 const handleLogout = async () => {

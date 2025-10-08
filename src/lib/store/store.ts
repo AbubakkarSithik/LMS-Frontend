@@ -4,6 +4,7 @@ import authReducer from "@/lib/store/slices/authSlice";
 import onboardReducer from "@/lib/store/slices/onboardSlice";
 import OrganizationSlice from "@/lib/store/slices/organizationSlice";
 import leaveSlice from "@/lib/store/slices/leaveSlice";
+import leaveRequestSlice from "@/lib/store/slices/leaveRequestSlice";
 
 export const store = configureStore({
   devTools: import.meta.env.DEV,
@@ -12,7 +13,8 @@ export const store = configureStore({
     auth: authReducer,
     onboard: onboardReducer,
     organization: OrganizationSlice,
-    leave: leaveSlice
+    leave: leaveSlice,
+    leaveRequest: leaveRequestSlice
   },
 });
 

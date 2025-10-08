@@ -53,12 +53,22 @@ export interface Roles {
   role_name: string;
 }
 
+export type RelationType = "employee-manager" | "manager-hr";
+
+export interface RelationData {
+  id?: number;
+  employee_id?: string;
+  manager_id?: string;
+  hr_id?: string;
+}
+
 export type OrganizationState = {
     organization: Organization | null,
     holiday: Holiday[],
     leave_types: LeaveTypes[]
     users: UserRow[]
     roles: Roles[];
+    relations: Record<RelationType, RelationData[]>;
 };
 
 export interface AppUser {
@@ -96,4 +106,60 @@ export interface Relation {
   manager_id?: string;
   hr_id?: string;
   admin_id?: string;
+}
+
+export interface Employee {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+export interface LeaveRequest {
+  leave_request_id: number;
+  start_date: string;
+  end_date: string;
+  reason: string;
+  status: 'Pending' | 'Under Review' | 'Approved' | 'Rejected';
+  applied_at: string;
+  approved_at?: string | null;
+  approved_by?: string | null;
+  app_user: Employee;
+  leave_type: LeaveTypes;
+}
+
+export interface LeaveAuditLog {
+  log_id: number;
+  leave_request_id: number;
+  action: 'Created' | 'Approved' | 'Rejected';
+  from_status: string;
+  to_status: string;
+  performed_by: string;
+  performed_at: string;
+  remarks: string | null;
+}
+
+export interface LeaveState {
+  requests: LeaveRequest[];
+  pendingRequests: LeaveRequest[]; 
+  history: LeaveRequest[]; 
+  leaveTypes: LeaveTypes[];
+  isLoading: boolean;
+  error: string | null;
+  activeRequestLog: LeaveAuditLog[] | null;
+}
+
+export interface LeaveRequestPayload {
+  leave_type_id: number;
+  start_date: string;
+  end_date: string;
+  reason: string;
+}
+
+export interface LeaveRequestCardProps {
+  request: LeaveRequest;
+  isManagerView: boolean;
+  onApprove: (id: number, remarks: string) => void;
+  onReject: (id: number, remarks: string) => void;
+  onViewDetails: (id: number) => void;
 }
