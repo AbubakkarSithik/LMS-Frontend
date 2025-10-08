@@ -97,9 +97,7 @@ const leaveRequestSlice = createSlice({
         state.pendingRequests = action.payload.filter(req => req.status === 'Pending');
     }
   },
-  extraReducers: (builder) => {
-    // IMPORTANT: All addCase calls must come BEFORE addMatcher calls
-    
+  extraReducers: (builder) => {    
     // Fetch Leave Types
     builder.addCase(fetchLeaveTypes.fulfilled, (state, action: PayloadAction<LeaveTypes[]>) => {
       state.isLoading = false;
@@ -110,7 +108,7 @@ const leaveRequestSlice = createSlice({
     .addCase(fetchAllLeaveRequests.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
       state.isLoading = false;
       state.requests = action.payload;
-      state.history = action.payload.filter(req => req.app_user.id === 'current_user_id'); 
+      state.history = action.payload; 
       state.pendingRequests = action.payload.filter(req => req.status === 'Pending' || req.status === 'Under Review');
     })
 
