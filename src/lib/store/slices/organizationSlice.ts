@@ -1,11 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { Holiday,UserRow ,LeaveTypes, Organization, OrganizationState, Roles } from "@/lib/types/type";
+import type { Holiday,UserRow ,LeaveTypes, Organization, OrganizationState, Roles , RelationData , RelationType} from "@/lib/types/type";
 const initialState: OrganizationState = {
   organization: null,
   holiday: [],
   leave_types: [],
   users: [],
   roles: [],
+  relations: {
+    "employee-manager": [],
+    "manager-hr": [],
+  },
 };
 
 const OrganizationSlice = createSlice({
@@ -27,9 +31,12 @@ const OrganizationSlice = createSlice({
     setRoles: (state, action: PayloadAction<Roles[]>) => {
           state.roles = action.payload;
     },
+    setRelations( state, action: PayloadAction<Record<RelationType, RelationData[]>> ) {
+      state.relations = action.payload;
+    },
     resetOrganization: () => initialState,
   },
 });
 
-export const { setOrganization, setHoliday, setLeaveTypes, setUsers, setRoles ,resetOrganization } = OrganizationSlice.actions;
+export const { setOrganization, setHoliday, setLeaveTypes, setUsers, setRoles, setRelations ,resetOrganization } = OrganizationSlice.actions;
 export default OrganizationSlice.reducer;

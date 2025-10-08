@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '../ui/button'
 import { RiUserAddLine } from '@remixicon/react'
 import { Dialog, DialogContent, DialogDescription , DialogTitle} from '../ui/dialog'
+import OrgRelations from './organizationComponents/OrgRelations'
 
 const Organization:React.FC = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Organization:React.FC = () => {
           </Button>}
         </div>
             <ListingUsers />
+            <OrgRelations />
             <Dialog open={inviteDialogOpen} onOpenChange={setInviteDialogOpen} >
                     <DialogContent showCloseButton={true}>
                           <DialogTitle className="sr-only"></DialogTitle>

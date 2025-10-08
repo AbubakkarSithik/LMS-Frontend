@@ -53,12 +53,22 @@ export interface Roles {
   role_name: string;
 }
 
+export type RelationType = "employee-manager" | "manager-hr";
+
+export interface RelationData {
+  id?: number;
+  employee_id?: string;
+  manager_id?: string;
+  hr_id?: string;
+}
+
 export type OrganizationState = {
     organization: Organization | null,
     holiday: Holiday[],
     leave_types: LeaveTypes[]
     users: UserRow[]
     roles: Roles[];
+    relations: Record<RelationType, RelationData[]>;
 };
 
 export interface AppUser {
