@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { requestLeave, fetchLeaveTypes, fetchAllLeaveRequests } from '@/lib/store/slices/leaveRequestSlice';
-import type { LeaveRequestPayload } from '@/lib/types/type';
+import type { LeaveRequestPayload , LeaveBalance} from '@/lib/types/type';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { RiCalendarLine, RiMailSendLine, RiLoader2Line } from "@remixicon/react";
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { getBackendURL } from '@/lib/utils';
+import { setLeaveBalance } from '@/lib/store/slices/leaveSlice';
 
 const LeaveRequestForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -22,9 +24,25 @@ const LeaveRequestForm: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const fetchLeaveBalances = async () => {
+      try {
+        const res = await fetch(`${getBackendURL()}/leave/leave-balances`, { credentials: "include" });
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          toast.error(err?.error || "Failed to load leave balances");
+          return;
+        }
+        const data: LeaveBalance[] = await res.json();
+        dispatch(setLeaveBalance(data));
+      } catch (err) {
+        console.error("Load leave balances error:", err);
+        toast.error("Server error while loading leave balances");
+      } 
+    };
 
   useEffect(() => {
     dispatch(fetchLeaveTypes());
+    fetchLeaveBalances();
   }, [dispatch]);
 
   useEffect(() => {
@@ -52,7 +70,8 @@ const LeaveRequestForm: React.FC = () => {
         return;
       }
       // Validate leave balance
-      if (leaveBalance.find((balance) => balance.leave_type_id === formData.leave_type_id && balance.remaining === 0)){
+      const isExhausted = leaveBalance.find((balance) => balance.leave_type_id === formData.leave_type_id && balance.remaining === 0);
+      if (isExhausted){
         toast.error(`Oops! You have exhausted your leave balance for ${leaveTypes.find((type) => type.leave_type_id === formData.leave_type_id)?.name}.`);
         setIsSubmitting(false);
         return;
@@ -80,6 +99,22 @@ const LeaveRequestForm: React.FC = () => {
       setIsSubmitting(false);
     }
   };
+
+const calculateDateDifference = (date1: Date, date2: Date): number => {
+    const timeDifference = Math.abs(date2.getTime() - date1.getTime());
+    const differenceInDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    return differenceInDays;
+};
+const durationInDays = useMemo(() => {
+        const { start_date, end_date } = formData;
+        if (start_date && end_date) {
+            const days = calculateDateDifference(new Date(start_date), new Date(end_date));
+            return days + 1;
+        }
+        return 0;
+}, [formData.start_date, formData.end_date]);
+
+const isDurationVisible = durationInDays > 0;
 
   return (
     <Card className="max-w-4xl mx-auto shadow-none border-none bg-transparent">
@@ -112,7 +147,7 @@ const LeaveRequestForm: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className={`grid grid-cols-3 gap-4`}>
             <div className="space-y-2">
               <label htmlFor="start_date" className="text-sm font-medium">Start Date</label>
               <Input
@@ -125,6 +160,10 @@ const LeaveRequestForm: React.FC = () => {
                 className="bg-muted/30"
               />
             </div>
+              <div className="space-y-2">
+                <label htmlFor="duration" className="text-sm font-medium">Days</label>
+                <div className="flex items-center justify-center h-9 bg-gray-100 border rounded-lg">{isDurationVisible ? durationInDays: "-"}</div>
+              </div>
             <div className="space-y-2">
               <label htmlFor="end_date" className="text-sm font-medium">End Date</label>
               <Input
