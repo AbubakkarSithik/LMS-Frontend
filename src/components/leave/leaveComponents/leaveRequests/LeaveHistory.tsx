@@ -52,7 +52,7 @@ const LeaveHistory: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">
-        <RiLoader2Line className="h-8 w-8 text-primary animate-spin" />
+        <RiLoader2Line className="h-8 w-8 text-ts12 animate-spin" />
         <p className="ml-2 text-primary">Loading Leave History...</p>
       </div>
     );
