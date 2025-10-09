@@ -132,11 +132,12 @@ export interface LeaveAuditLog {
   log_id: number;
   leave_request_id: number;
   action: 'Created' | 'Approved' | 'Rejected';
-  from_status: string;
-  to_status: string;
+  old_status: string;
+  new_status: string;
   performed_by: string;
   performed_at: string;
   remarks: string | null;
+  app_user: Employee;
 }
 
 export interface LeaveState {

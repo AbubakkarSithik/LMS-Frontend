@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { requestLeave, fetchLeaveTypes, fetchAllLeaveRequests } from '@/lib/store/slices/leaveRequestSlice';
-import type { LeaveRequestPayload } from '@/lib/types/type';
+import type { LeaveRequestPayload , LeaveBalance} from '@/lib/types/type';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,11 +9,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { RiCalendarLine, RiMailSendLine, RiLoader2Line } from "@remixicon/react";
 import { toast } from 'sonner';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { getBackendURL } from '@/lib/utils';
+import { setLeaveBalance } from '@/lib/store/slices/leaveSlice';
 
 const LeaveRequestForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const { leaveTypes, isLoading: typesLoading } = useAppSelector((state) => state.leaveRequest);
-  
+  const { leaveBalance } = useAppSelector((state) => state.leave);
   const [formData, setFormData] = useState<LeaveRequestPayload>({
     leave_type_id: 0,
     start_date: '',
@@ -22,9 +24,25 @@ const LeaveRequestForm: React.FC = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const fetchLeaveBalances = async () => {
+      try {
+        const res = await fetch(`${getBackendURL()}/leave/leave-balances`, { credentials: "include" });
+        if (!res.ok) {
+          const err = await res.json().catch(() => null);
+          toast.error(err?.error || "Failed to load leave balances");
+          return;
+        }
+        const data: LeaveBalance[] = await res.json();
+        dispatch(setLeaveBalance(data));
+      } catch (err) {
+        console.error("Load leave balances error:", err);
+        toast.error("Server error while loading leave balances");
+      } 
+    };
 
   useEffect(() => {
     dispatch(fetchLeaveTypes());
+    fetchLeaveBalances();
   }, [dispatch]);
 
   useEffect(() => {
@@ -51,7 +69,13 @@ const LeaveRequestForm: React.FC = () => {
         setIsSubmitting(false);
         return;
       }
-
+      // Validate leave balance
+      const isExhausted = leaveBalance.find((balance) => balance.leave_type_id === formData.leave_type_id && balance.remaining === 0);
+      if (isExhausted){
+        toast.error(`Oops! You have exhausted your leave balance for ${leaveTypes.find((type) => type.leave_type_id === formData.leave_type_id)?.name}.`);
+        setIsSubmitting(false);
+        return;
+      }
       // Validate date range
       if (new Date(formData.start_date) > new Date(formData.end_date)) {
         toast.error("End date must be after start date.");
@@ -76,11 +100,27 @@ const LeaveRequestForm: React.FC = () => {
     }
   };
 
+const calculateDateDifference = (date1: Date, date2: Date): number => {
+    const timeDifference = Math.abs(date2.getTime() - date1.getTime());
+    const differenceInDays = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+    return differenceInDays;
+};
+const durationInDays = useMemo(() => {
+        const { start_date, end_date } = formData;
+        if (start_date && end_date) {
+            const days = calculateDateDifference(new Date(start_date), new Date(end_date));
+            return days + 1;
+        }
+        return 0;
+}, [formData.start_date, formData.end_date]);
+
+const isDurationVisible = durationInDays > 0;
+
   return (
-    <Card className="max-w-xl mx-auto shadow-xl border-primary animate-in fade-in zoom-in-50 duration-500">
+    <Card className="max-w-4xl mx-auto shadow-none border-none bg-transparent">
       <CardHeader>
         <CardTitle className="text-2xl text-primary flex items-center">
-          <RiCalendarLine className="mr-2" /> Request New Leave
+          <RiCalendarLine className="mr-2 text-ts12" /> Request New Leave
         </CardTitle>
         <CardDescription>
           Fill out the details for your leave of absence.
@@ -107,7 +147,7 @@ const LeaveRequestForm: React.FC = () => {
               </SelectContent>
             </Select>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className={`grid grid-cols-3 gap-4`}>
             <div className="space-y-2">
               <label htmlFor="start_date" className="text-sm font-medium">Start Date</label>
               <Input
@@ -120,6 +160,10 @@ const LeaveRequestForm: React.FC = () => {
                 className="bg-muted/30"
               />
             </div>
+              <div className="space-y-2">
+                <label htmlFor="duration" className="text-sm font-medium">Days</label>
+                <div className="flex items-center justify-center h-9 bg-gray-100 border rounded-lg">{isDurationVisible ? durationInDays: "-"}</div>
+              </div>
             <div className="space-y-2">
               <label htmlFor="end_date" className="text-sm font-medium">End Date</label>
               <Input
@@ -148,7 +192,7 @@ const LeaveRequestForm: React.FC = () => {
           </div>
           <Button 
             type="submit" 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2 transition-all duration-300" 
+            className="w-1/3 mt-3.5 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white" 
             disabled={isSubmitting || leaveTypes.length === 0}
           >
             {isSubmitting ? (

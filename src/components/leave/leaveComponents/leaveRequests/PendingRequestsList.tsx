@@ -20,7 +20,8 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
   const [actionType, setActionType] = useState<'approve' | 'reject' | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { isAdmin , isEmployee } = useSelector((state: RootState) => state.auth);
+  const { isAdmin , isEmployee , appUser } = useSelector((state: RootState) => state.auth);
+  const cuurentAppUser = appUser?.id;
 
   const handleAction = async () => {
     if (!actionType) return;
@@ -71,7 +72,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           {request.status}
         </Badge>
       </div>
-      {(!isAdmin && !isEmployee) &&<Separator className="my-3" />}
+      {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Separator className="my-3" />}
       <div className="flex justify-end space-x-2">
         
         {/* Approve Dialog */}
@@ -83,9 +84,9 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           }
         }}>
           <DialogTrigger asChild>
-            {(!isAdmin && !isEmployee) &&<Button 
+            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Button 
               variant="default" 
-              className="bg-green-600 hover:bg-green-700 text-white"
+              className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
               onClick={() => { setActionType('approve'); setIsDialogOpen(true); }}
             >
               <RiCheckLine className="mr-2" /> Approve
@@ -105,12 +106,12 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
               disabled={isProcessing}
             />
             <DialogFooter>
-              <Button onClick={() => setIsDialogOpen(false)} variant="outline" disabled={isProcessing}>
+              <Button onClick={() => setIsDialogOpen(false)} variant="outline" disabled={isProcessing} className='cursor-pointer'>
                 Cancel
               </Button>
               <Button 
                 onClick={handleAction} 
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
                 disabled={isProcessing}
               >
                 {isProcessing ? (
@@ -135,9 +136,9 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           }
         }}>
           <DialogTrigger asChild>
-            {(!isAdmin && !isEmployee) &&<Button 
+            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Button 
               variant="destructive" 
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 cursor-pointer"
               onClick={() => { setActionType('reject'); setIsDialogOpen(true); }}
             >
               <RiCloseLine className="mr-2" /> Reject
@@ -158,13 +159,14 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
               className="min-h-[100px]"
             />
             <DialogFooter>
-              <Button onClick={() => setIsDialogOpen(false)} variant="outline" disabled={isProcessing}>
+              <Button onClick={() => setIsDialogOpen(false)} variant="outline" disabled={isProcessing} className='cursor-pointer'>
                 Cancel
               </Button>
               <Button 
                 onClick={handleAction} 
                 variant="destructive"
                 disabled={isProcessing || remarks.trim().length === 0}
+                className='cursor-pointer'
               >
                 {isProcessing ? (
                   <>
@@ -212,8 +214,8 @@ const PendingRequestsList: React.FC = () => {
   return (
     <Card className="shadow-lg">
       <CardHeader>
-        <CardTitle className="text-3xl text-primary border-b pb-2 flex items-center">
-          <RiAlertLine className="mr-2" /> Pending Approvals ({pendingRequests.length})
+        <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
+          <RiAlertLine className="mr-2 text-ts12" /> Pending Approvals <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{pendingRequests.length}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
