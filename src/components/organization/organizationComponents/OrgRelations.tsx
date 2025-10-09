@@ -15,7 +15,7 @@ const OrgRelations: React.FC = () => {
   const dispatch = useDispatch();
   const { users , relations} = useSelector((state: RootState) => state.organization);
   const [loading, setLoading] = useState(true);
-
+  const isDashboard = window.location.pathname === "/dashboard";
   const fetchRelations = async () => {
   try {
     setLoading(true);
@@ -77,6 +77,7 @@ const OrgRelations: React.FC = () => {
       className="space-y-6 "
     >
       <h2 className="text-2xl text-left font-bold">Organization Relations</h2>
+      <div className={"space-y-2 " + (isDashboard && "grid grid-cols-2 gap-4")}>
       {Object.entries(relations).map(([key, list]) => {
         const type = key as RelationType;
         const unique = Array.from(
@@ -127,6 +128,7 @@ const OrgRelations: React.FC = () => {
           </Card>
         );
       })}
+      </div>
     </motion.div>
   );
 };
