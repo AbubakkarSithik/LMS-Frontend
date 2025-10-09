@@ -13,6 +13,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/lib/store/store';
+import { useNavigate } from 'react-router-dom';
 
 const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) => {
   const dispatch = useAppDispatch();
@@ -22,6 +23,8 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
   const [isProcessing, setIsProcessing] = useState(false);
   const { isAdmin , isEmployee , appUser } = useSelector((state: RootState) => state.auth);
   const cuurentAppUser = appUser?.id;
+  const isDasboard = window.location.pathname === '/dashboard';
+  const navigate = useNavigate();
 
   const handleAction = async () => {
     if (!actionType) return;
@@ -49,6 +52,14 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
       setIsProcessing(false);
     }
   };
+
+  const handleDashboardClick = () => {
+      if(isDasboard){
+        navigate('/leave');
+      }else{
+        return
+      }
+  };
   
   const formattedDateRange = `${new Date(request.start_date).toLocaleDateString()} - ${new Date(request.end_date).toLocaleDateString()}`;
 
@@ -57,14 +68,15 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="border rounded-lg p-4 mb-4 hover:shadow-md transition-shadow bg-card"
+      className={"border rounded-lg p-4 mb-4 hover:shadow-md transition-shadow bg-card" + (isDasboard && ' cursor-pointer')}
+      onClick={handleDashboardClick}
     >
       <div className="flex justify-between items-start">
         <div className="space-y-1">
-          <p className="font-bold text-lg text-primary">{request.app_user.first_name} {request.app_user.last_name}</p>
-          <p className="text-sm text-muted-foreground">{request.leave_type.name} | {formattedDateRange}</p>
-          <p className="text-xs text-gray-500 italic pt-1">Applied: {new Date(request.applied_at).toLocaleDateString()}</p>
-          {request.reason && (
+          <p className="font-bold text-lg text-primary" >{request.app_user.first_name} {request.app_user.last_name}</p>
+          {!isDasboard && <><p className="text-sm text-muted-foreground">{request.leave_type.name} | {formattedDateRange}</p>
+          <p className="text-xs text-gray-500 italic pt-1">Applied: {new Date(request.applied_at).toLocaleDateString()}</p> </>}
+          {request.reason && !isDasboard && (
             <p className="text-sm pt-2"><span className="font-semibold">Reason:</span> {request.reason}</p>
           )}
         </div>
@@ -72,7 +84,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           {request.status}
         </Badge>
       </div>
-      {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Separator className="my-3" />}
+      {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser) && !isDasboard) &&<Separator className="my-3" />}
       <div className="flex justify-end space-x-2">
         
         {/* Approve Dialog */}
@@ -84,7 +96,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           }
         }}>
           <DialogTrigger asChild>
-            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Button 
+            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser) && !isDasboard) &&<Button 
               variant="default" 
               className="bg-green-600 hover:bg-green-700 text-white cursor-pointer"
               onClick={() => { setActionType('approve'); setIsDialogOpen(true); }}
@@ -136,7 +148,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
           }
         }}>
           <DialogTrigger asChild>
-            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser)) &&<Button 
+            {(!isAdmin && !isEmployee && !(request.app_user.id === cuurentAppUser) && !isDasboard) &&<Button 
               variant="destructive" 
               className="bg-red-600 hover:bg-red-700 cursor-pointer"
               onClick={() => { setActionType('reject'); setIsDialogOpen(true); }}

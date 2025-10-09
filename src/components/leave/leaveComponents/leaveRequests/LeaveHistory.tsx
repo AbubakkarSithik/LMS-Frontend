@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RiHistoryLine, RiEyeLine, RiLoader2Line, RiCalendarCheckLine } from "@remixicon/react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 
@@ -144,6 +144,7 @@ const LeaveHistory: React.FC = () => {
             <DialogTitle className='text-primary flex items-center'>
               <RiCalendarCheckLine className="mr-2" /> Leave Request Log
             </DialogTitle>
+            <DialogDescription className='sr-only'></DialogDescription>
           </DialogHeader>
           <Separator className="my-2" />
           <div className="max-h-[70vh] overflow-y-auto space-y-4">
