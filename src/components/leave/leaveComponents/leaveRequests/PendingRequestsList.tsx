@@ -188,7 +188,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
 const PendingRequestsList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { pendingRequests, isLoading, error } = useAppSelector(state => state.leaveRequest);
-
+  const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
     dispatch(fetchAllLeaveRequests());
   }, [dispatch]);
@@ -212,7 +212,7 @@ const PendingRequestsList: React.FC = () => {
   }
 
   return (
-    <Card className="shadow-lg">
+    <Card className={`${isDasboard ? 'shadow-none rounded': 'shadow-lg'}`}>
       <CardHeader>
         <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
           <RiAlertLine className="mr-2 text-ts12" /> Pending Approvals <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{pendingRequests.length}</span>

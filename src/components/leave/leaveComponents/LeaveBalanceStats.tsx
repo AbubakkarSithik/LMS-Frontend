@@ -81,8 +81,8 @@ const LeaveBalanceStats: React.FC = () => {
 
   return (
     <>
-    <h2 className="text-2xl font-semibold text-ts12 mx-4.5 text-left">Leave Balance</h2>
-    <div className="p-6 bg-transparent grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <h2 className="text-2xl font-semibold text-black mb-2 text-left">Leave Balance</h2>
+    <div className="p-0 bg-transparent grid md:grid-cols-2 lg:grid-cols-4 gap-6">
       {loading ? (
         <div className="flex items-center justify-center py-8 col-span-full">
           <RiLoader2Line className="animate-spin text-ts12" size={26} />
@@ -117,7 +117,7 @@ const LeaveBalanceStats: React.FC = () => {
           return (
             <motion.div
               key={lb!.leave_type_id}
-              className="bg-white/80 backdrop-blur-lg rounded shadow-md p-0 flex flex-col items-center justify-between"
+              className="bg-white/80 backdrop-blur-lg rounded shadow-sm p-0 flex flex-col items-center justify-between"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
