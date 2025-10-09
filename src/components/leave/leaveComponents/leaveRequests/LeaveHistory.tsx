@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RiHistoryLine, RiEyeLine, RiLoader2Line, RiCalendarCheckLine } from "@remixicon/react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { motion } from 'framer-motion';
 import { Separator } from "@/components/ui/separator";
 
@@ -32,6 +32,7 @@ const LeaveHistory: React.FC = () => {
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
   const [loadingLog, setLoadingLog] = useState(false);
   const currentUserHistory =  isAdmin ? history :  history.filter((req) => req.app_user.id === appUser?.id);  
+  const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
     dispatch(fetchAllLeaveRequests());
   }, [dispatch]);
@@ -51,7 +52,7 @@ const LeaveHistory: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-48">
-        <RiLoader2Line className="h-8 w-8 text-primary animate-spin" />
+        <RiLoader2Line className="h-8 w-8 text-ts12 animate-spin" />
         <p className="ml-2 text-primary">Loading Leave History...</p>
       </div>
     );
@@ -66,7 +67,7 @@ const LeaveHistory: React.FC = () => {
   }
 
   return (
-    <Card className="shadow-lg">
+    <Card className={`${isDasboard ? 'shadow-none rounded': 'shadow-lg'}`}>
       <CardHeader>
         <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
           <RiHistoryLine className="mr-2 text-ts12" /> Leave History <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{currentUserHistory.length}</span>
@@ -143,6 +144,7 @@ const LeaveHistory: React.FC = () => {
             <DialogTitle className='text-primary flex items-center'>
               <RiCalendarCheckLine className="mr-2" /> Leave Request Log
             </DialogTitle>
+            <DialogDescription className='sr-only'></DialogDescription>
           </DialogHeader>
           <Separator className="my-2" />
           <div className="max-h-[70vh] overflow-y-auto space-y-4">

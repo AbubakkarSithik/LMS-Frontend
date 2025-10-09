@@ -5,7 +5,7 @@ import { setLeaveBalance } from "@/lib/store/slices/leaveSlice";
 import { setLeaveTypes } from "@/lib/store/slices/organizationSlice";
 import { toast } from "sonner";
 import type { LeaveBalance, LeaveTypes } from "@/lib/types/type";
-import { RiLoader2Line } from "@remixicon/react";
+import { RiLoader2Line, RiPieChart2Line } from "@remixicon/react";
 import { getBackendURL } from "@/lib/utils";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, Title } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
@@ -80,9 +80,9 @@ const LeaveBalanceStats: React.FC = () => {
       .filter((lb) => lb !== null) || [];
 
   return (
-    <>
-    <h2 className="text-2xl font-semibold text-ts12 mx-4.5 text-left">Leave Balance</h2>
-    <div className="p-6 bg-transparent grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="bg-white rounded border p-6">
+    <h2 className="text-2xl font-semibold text-black border-b pb-2  text-left flex gap-2 items-center"> <RiPieChart2Line size={24} className="text-ts12" /> Leave Balance</h2>
+    <div className="mt-4 bg-transparent grid md:grid-cols-2 lg:grid-cols-4 gap-6">
       {loading ? (
         <div className="flex items-center justify-center py-8 col-span-full">
           <RiLoader2Line className="animate-spin text-ts12" size={26} />
@@ -117,7 +117,7 @@ const LeaveBalanceStats: React.FC = () => {
           return (
             <motion.div
               key={lb!.leave_type_id}
-              className="bg-white/80 backdrop-blur-lg rounded shadow-md p-0 flex flex-col items-center justify-between"
+              className="bg-white/80 backdrop-blur-lg rounded shadow-sm p-0 flex flex-col items-center justify-between"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
@@ -151,7 +151,7 @@ const LeaveBalanceStats: React.FC = () => {
         </p>
       )}
     </div>
-    </>
+    </div>
   );
 };
 
