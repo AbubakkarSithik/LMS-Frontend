@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 const LeaveRequestForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const { leaveTypes, isLoading: typesLoading } = useAppSelector((state) => state.leaveRequest);
-  
+  const { leaveBalance } = useAppSelector((state) => state.leave);
   const [formData, setFormData] = useState<LeaveRequestPayload>({
     leave_type_id: 0,
     start_date: '',
@@ -51,7 +51,12 @@ const LeaveRequestForm: React.FC = () => {
         setIsSubmitting(false);
         return;
       }
-
+      // Validate leave balance
+      if (leaveBalance.find((balance) => balance.leave_type_id === formData.leave_type_id && balance.remaining === 0)){
+        toast.error(`Oops! You have exhausted your leave balance for ${leaveTypes.find((type) => type.leave_type_id === formData.leave_type_id)?.name}.`);
+        setIsSubmitting(false);
+        return;
+      }
       // Validate date range
       if (new Date(formData.start_date) > new Date(formData.end_date)) {
         toast.error("End date must be after start date.");
