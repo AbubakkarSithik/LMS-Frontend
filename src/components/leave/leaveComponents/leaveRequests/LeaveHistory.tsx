@@ -27,12 +27,11 @@ const getStatusBadge = (status: LeaveRequest['status']) => {
 
 const LeaveHistory: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { appUser } = useAppSelector(state => state.auth);
-  const { users } = useAppSelector(state => state.organization);
+  const { appUser , isAdmin } = useAppSelector(state => state.auth);
   const { history, isLoading, error, activeRequestLog } = useAppSelector(state => state.leaveRequest);
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
   const [loadingLog, setLoadingLog] = useState(false);
-  const currentUserHistory = history.filter((req) => req.app_user.id === appUser?.id);  
+  const currentUserHistory =  isAdmin ? history :  history.filter((req) => req.app_user.id === appUser?.id);  
   useEffect(() => {
     dispatch(fetchAllLeaveRequests());
   }, [dispatch]);
@@ -69,8 +68,8 @@ const LeaveHistory: React.FC = () => {
   return (
     <Card className="shadow-lg">
       <CardHeader>
-        <CardTitle className="text-3xl text-primary border-b pb-2 flex items-center">
-          <RiHistoryLine className="mr-2" /> Leave History ({currentUserHistory.length})
+        <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
+          <RiHistoryLine className="mr-2 text-ts12" /> Leave History <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{currentUserHistory.length}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -78,7 +77,7 @@ const LeaveHistory: React.FC = () => {
           <Table>
             <TableHeader>
               <TableRow className="bg-primary/10">
-                <TableHead>Employee</TableHead>
+                {isAdmin && <TableHead>Employee</TableHead>}
                 <TableHead>Type</TableHead>
                 <TableHead>Dates</TableHead>
                 <TableHead>Reason</TableHead>
@@ -90,7 +89,7 @@ const LeaveHistory: React.FC = () => {
               {currentUserHistory.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
-                    No leave requests found in currentUserHistory.
+                    No leave requests history found.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -102,9 +101,9 @@ const LeaveHistory: React.FC = () => {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="hover:bg-accent/50"
                   >
-                    <TableCell className="font-medium">
+                    { isAdmin && <TableCell className="font-medium">
                       {request.app_user.first_name} {request.app_user.last_name}
-                    </TableCell>
+                    </TableCell>}
                     <TableCell>{request.leave_type.name}</TableCell>
                     <TableCell>
                       {new Date(request.start_date).toLocaleDateString()} - {new Date(request.end_date).toLocaleDateString()}
@@ -119,6 +118,7 @@ const LeaveHistory: React.FC = () => {
                         size="sm" 
                         onClick={() => handleViewDetails(request.leave_request_id)}
                         disabled={loadingLog}
+                        className='hover:bg-orange-100 cursor-pointer'
                       >
                         {loadingLog ? (
                           <RiLoader2Line className="h-4 w-4 mr-1 animate-spin" />
@@ -141,7 +141,7 @@ const LeaveHistory: React.FC = () => {
         <DialogContent className="sm:max-w-[600px]">
           <DialogHeader>
             <DialogTitle className='text-primary flex items-center'>
-              <RiCalendarCheckLine className="mr-2" /> Request Audit Log
+              <RiCalendarCheckLine className="mr-2" /> Leave Request Log
             </DialogTitle>
           </DialogHeader>
           <Separator className="my-2" />
@@ -155,16 +155,16 @@ const LeaveHistory: React.FC = () => {
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className="p-3 border-l-4 border-primary/70 bg-secondary/30 rounded-md"
+                  className="p-3 border-l-4 border-ts12/40 bg-secondary/30 rounded-md"
                 >
                   <p className="font-semibold text-sm">
-                    {log.action} 
+                    {log.action}
                     <span className="text-xs font-normal text-muted-foreground ml-2">
-                      ({log.from_status} &rarr; {log.to_status})
+                      ({log.old_status ?? "Initiated"} &rarr; {log.new_status})
                     </span>
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    By User {users.find(user => user.id === log.performed_by)?.first_name || log.performed_by} at {new Date(log.performed_at).toLocaleString()}
+                    By {log.app_user.first_name} {log.app_user.last_name} at {new Date(log.performed_at).toLocaleString()}
                   </p>
                   {log.remarks && (
                     <p className="text-sm italic mt-1 text-gray-700">
