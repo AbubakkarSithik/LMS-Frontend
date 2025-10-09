@@ -77,10 +77,10 @@ const LeaveRequestForm: React.FC = () => {
   };
 
   return (
-    <Card className="max-w-xl mx-auto shadow-xl border-primary animate-in fade-in zoom-in-50 duration-500">
+    <Card className="max-w-4xl mx-auto shadow-none border-none bg-transparent">
       <CardHeader>
         <CardTitle className="text-2xl text-primary flex items-center">
-          <RiCalendarLine className="mr-2" /> Request New Leave
+          <RiCalendarLine className="mr-2 text-ts12" /> Request New Leave
         </CardTitle>
         <CardDescription>
           Fill out the details for your leave of absence.
@@ -148,7 +148,7 @@ const LeaveRequestForm: React.FC = () => {
           </div>
           <Button 
             type="submit" 
-            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-2 transition-all duration-300" 
+            className="w-1/3 mt-3.5 cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white" 
             disabled={isSubmitting || leaveTypes.length === 0}
           >
             {isSubmitting ? (
