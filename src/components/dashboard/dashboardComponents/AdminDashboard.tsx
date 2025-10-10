@@ -1,6 +1,6 @@
 import LeaveHistory from '@/components/leave/leaveComponents/leaveRequests/LeaveHistory'
 import React from 'react'
-import HolidayCarousel from './HolidayCarousal'
+import HolidayCarousel from '../../holiday/HolidayCarousal'
 import PendingRequestsList from '@/components/leave/leaveComponents/leaveRequests/PendingRequestsList'
 
 const AdminDashboard: React.FC = () => {

@@ -4,7 +4,7 @@ import PendingRequestsList from '@/components/leave/leaveComponents/leaveRequest
 import type { RootState } from '@/lib/store/store';
 import React from 'react'
 import { useSelector } from 'react-redux'
-import HolidayCarousel from './HolidayCarousal';
+import HolidayCarousel from '../../holiday/HolidayCarousal';
 
 const UserDashboard: React.FC = () => {
   const { isEmployee } = useSelector((state: RootState) => state.auth);

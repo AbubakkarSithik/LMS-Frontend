@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useDispatch , useSelector} from "react-redux";
 import { setSession, clearSession  , setIsAdmin  , setIsManager , setIsHR , setIsEmployee} from "@/lib/store/slices/authSlice";
 import { setAppUser } from "@/lib/store/slices/authSlice";
-import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiTeamLine, RiUser3Line } from '@remixicon/react';
+import { RiBuildingLine, RiDashboardLine, RiLoader2Line, RiLogoutBoxLine, RiSuitcase3Line, RiTeamLine, RiUser3Line } from '@remixicon/react';
 import { motion } from "framer-motion";
 import { setOrganization , setRoles , setRelations } from '@/lib/store/slices/organizationSlice';
 import type { RootState } from '@/lib/store/store';
@@ -186,6 +186,7 @@ return (
         <nav className="flex flex-col gap-3 text-sm">
           <NavItem icon={<RiDashboardLine size={20} />} label="Dashboard" to="/dashboard" />
           <NavItem icon={<RiTeamLine size={20} />} label="Leave" to="/leave" />
+          <NavItem icon={<RiSuitcase3Line size={20} />} label="Holiday" to="/holiday" />
           { (isAdmin || isHR) &&  (
               <NavItem icon={<RiBuildingLine size={20} />} label="Organization" to="/organization" />
           )}
@@ -228,7 +229,7 @@ return (
           </div>
         </header>
         {/* Main body */}
-        <main className="flex-1 overflow-y-auto p-4 hide-scroll">
+        <main className="flex-1 overflow-y-auto hide-scroll">
           <Toaster />
           <Outlet />
         </main>

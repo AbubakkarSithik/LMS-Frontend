@@ -7,6 +7,7 @@ import Dashboard from './components/dashboard/Dashboard'
 import Organization from './components/organization/Organization'
 import LmsLayout from './components/layout/LmsLayout'
 import Leave from './components/leave/Leave'
+import Holidays from './components/holiday/Holidays'
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/organization" element={<Organization />} />
         <Route path="/leave" element={<Leave />} />
+        <Route path="/holiday" element={<Holidays />} />
       </Route>
     </Routes>
   )

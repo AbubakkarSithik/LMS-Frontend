@@ -8,7 +8,7 @@ import { Separator } from '../ui/separator';
 const Dashboard: React.FC = () => {
   const { isAdmin } = useSelector((state: RootState) => state.auth);
   return (
-        <div className='space-y-2'>
+        <div className='space-y-2 p-4'>
               <h1 className="text-2xl font-semibold text-left text-ts12">Summary</h1>
               <Separator className='bg-ts12' />
             {isAdmin ? <AdminDashboard /> : <UserDashboard />}

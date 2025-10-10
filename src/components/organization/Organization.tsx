@@ -22,7 +22,7 @@ const Organization:React.FC = () => {
     }
   },[])
   return (
-        <div className='space-y-4'>
+        <div className='space-y-4 p-4'>
           <div className='flex items-center justify-between'>
           <h2 className="text-2xl font-semibold text-black">Users</h2>
           { isAdmin && <Button onClick={handleInviteDialogOpen} className="w-fit cursor-pointer flex bg-gradient-to-r from-ts12 via-orange-400 to-orange-700 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white">
