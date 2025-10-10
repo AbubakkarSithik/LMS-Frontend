@@ -6,6 +6,7 @@ import PendingRequestsList from './leaveComponents/leaveRequests/PendingRequests
 import LeaveHistory from './leaveComponents/leaveRequests/LeaveHistory'
 import { useSelector } from 'react-redux'
 import type { RootState } from '@/lib/store/store'
+import ConsumptionStatus from './leaveComponents/ConsumptionStatus'
 
 const Leave: React.FC = () => {
   const { isAdmin , isEmployee } = useSelector((state: RootState) => state.auth);
@@ -24,6 +25,7 @@ const Leave: React.FC = () => {
                 </TabsList>
                 <TabsContent value="leave-form" className="w-full my-3">
                   <LeaveRequestForm/>
+                  <ConsumptionStatus/>
                 </TabsContent>
                 <TabsContent value="pending-approvals" className="w-full my-3">
                   <PendingRequestsList/>

@@ -8,6 +8,8 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { RiCalendar2Line, RiLoader2Line } from "@remixicon/react";
 import type { Holiday } from "@/lib/types/type";
 import { getBackendURL } from "@/lib/utils";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const HolidayCarousel: React.FC = () => {
   const { organization } = useSelector((state: RootState) => state.organization);
@@ -15,6 +17,7 @@ const HolidayCarousel: React.FC = () => {
   const [holidays, setHolidays] = useState<Holiday[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const baseURL = getBackendURL();
+  const navigate = useNavigate();
 
   const formatDateDisplay = (d: string | Date) => {
     const date = typeof d === "string" ? new Date(d) : d;
@@ -26,6 +29,9 @@ const HolidayCarousel: React.FC = () => {
     });
   };
 
+  const handleRedirect=()=>{
+    navigate("/holiday");
+  };
   const loadUpcomingHolidays = async () => {
     if (!orgId) {
       setLoading(false);
@@ -61,8 +67,12 @@ const HolidayCarousel: React.FC = () => {
 
   return (
     <div className="space-y-4 bg-white border rounded p-6">
-        <h2 className="text-2xl font-semibold text-gray-800 flex gap-2 items-center border-b pb-2"><RiCalendar2Line className="text-ts12" />Upcoming Holidays</h2>
-
+      <div className="w-full flex justify-between items-center border-b pb-2"> 
+        <h2 className="text-2xl font-semibold text-gray-800 flex gap-2 items-center"><RiCalendar2Line className="text-ts12" />Upcoming Holidays</h2>
+        <Button className="border-none shadow-none hover:text-orange-400 hover:bg-transparent cursor-pointer text-ts12" 
+                variant={"outline"}
+                onClick={handleRedirect}>View All</Button>
+        </div> 
       {loading ? (
         <div className="flex items-center justify-center py-8">
           <RiLoader2Line className="animate-spin text-ts12" size={24} />
