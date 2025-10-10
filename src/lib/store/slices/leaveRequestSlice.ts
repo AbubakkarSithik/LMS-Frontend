@@ -91,7 +91,6 @@ const initialState: LeaveState = {
   pendingRequests: [],
   history: [],
   leaveTypes: [],
-  isLoading: false,
   error: null,
   activeRequestLog: null,
 };
@@ -111,45 +110,34 @@ const leaveRequestSlice = createSlice({
   extraReducers: (builder) => {    
     // Fetch Leave Types
     builder.addCase(fetchLeaveTypes.fulfilled, (state, action: PayloadAction<LeaveTypes[]>) => {
-      state.isLoading = false;
       state.leaveTypes = action.payload;
     })
 
     // Fetch All Leave Requests
     .addCase(fetchAllLeaveRequests.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
-      state.isLoading = false;
       state.requests = action.payload;
       state.pendingRequests = action.payload.filter(req => req.status === 'Pending' || req.status === 'Under Review');
     })
 
     // Fetch All Leave History
     .addCase(fetchAllLeaveHistory.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
-      state.isLoading = false;
       state.history = action.payload; 
-    })
-
-    // Request Leave
-    .addCase(requestLeave.fulfilled, (state) => {
-      state.isLoading = false;
     })
 
     // Handle Approvals
     .addCase(approveLeave.fulfilled, (state, action: PayloadAction<{ id: number; response: any }>) => {
-      state.isLoading = false;
       const approvedId = action.payload.id;
       state.pendingRequests = state.pendingRequests.filter(req => req.leave_request_id !== approvedId);
     })
 
     // Handle Rejections
     .addCase(rejectLeave.fulfilled, (state, action: PayloadAction<{ id: number; response: any }>) => {
-      state.isLoading = false;
       const rejectedId = action.payload.id;
       state.pendingRequests = state.pendingRequests.filter(req => req.leave_request_id !== rejectedId);
     })
 
     // Fetch Audit Log
     .addCase(fetchAuditLog.fulfilled, (state, action: PayloadAction<LeaveAuditLog[]>) => {
-      state.isLoading = false;
       state.activeRequestLog = action.payload;
     })
     
@@ -157,7 +145,6 @@ const leaveRequestSlice = createSlice({
     .addMatcher(
       (action: Action) => isPending(action) && action.type.startsWith('leave/'),
       (state) => {
-        state.isLoading = true;
         state.error = null;
       }
     )
@@ -166,7 +153,6 @@ const leaveRequestSlice = createSlice({
     .addMatcher(
       (action: Action) => isRejected(action) && action.type.startsWith('leave/'),
       (state, action: any) => {
-        state.isLoading = false;
         state.error = action.payload || action.error?.message || 'An unknown error occurred.';
       }
     );

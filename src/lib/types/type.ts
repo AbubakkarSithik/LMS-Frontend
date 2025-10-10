@@ -145,7 +145,6 @@ export interface LeaveState {
   pendingRequests: LeaveRequest[]; 
   history: LeaveRequest[]; 
   leaveTypes: LeaveTypes[];
-  isLoading: boolean;
   error: string | null;
   activeRequestLog: LeaveAuditLog[] | null;
 }

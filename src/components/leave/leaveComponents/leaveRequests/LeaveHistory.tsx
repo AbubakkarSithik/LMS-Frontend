@@ -28,23 +28,26 @@ const getStatusBadge = (status: LeaveRequest['status']) => {
 const LeaveHistory: React.FC = () => {
   const dispatch = useAppDispatch();
   const { isAdmin } = useAppSelector(state => state.auth);
-  const { history, isLoading, error, activeRequestLog } = useAppSelector(state => state.leaveRequest);
+  const { history, error, activeRequestLog } = useAppSelector(state => state.leaveRequest);
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
-  const [loadingLog, setLoadingLog] = useState(false);
+  const [loadingLogId, setLoadingLogId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
+    setIsLoading(true);
     dispatch(fetchAllLeaveHistory());
+    setIsLoading(false);
   }, [dispatch]);
 
   const handleViewDetails = async (id: number) => {
-    setLoadingLog(true);
+    setLoadingLogId(id);
     try {
       await dispatch(fetchAuditLog(id)).unwrap();
       setIsLogDialogOpen(true);
     } catch (error) {
       console.error('Failed to fetch audit log:', error);
     } finally {
-      setLoadingLog(false);
+      setLoadingLogId(null);
     }
   };
 
@@ -117,10 +120,10 @@ const LeaveHistory: React.FC = () => {
                         variant="ghost" 
                         size="sm" 
                         onClick={() => handleViewDetails(request.leave_request_id)}
-                        disabled={loadingLog}
+                        disabled={loadingLogId === request.leave_request_id}
                         className='hover:bg-orange-100 cursor-pointer'
                       >
-                        {loadingLog ? (
+                        {loadingLogId === request.leave_request_id ?(
                           <RiLoader2Line className="h-4 w-4 mr-1 animate-spin" />
                         ) : (
                           <RiEyeLine className="h-4 w-4 mr-1 text-primary" />

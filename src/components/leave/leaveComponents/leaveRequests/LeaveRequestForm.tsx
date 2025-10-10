@@ -14,8 +14,9 @@ import { setLeaveBalance } from '@/lib/store/slices/leaveSlice';
 
 const LeaveRequestForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { leaveTypes, isLoading: typesLoading } = useAppSelector((state) => state.leaveRequest);
+  const { leaveTypes } = useAppSelector((state) => state.leaveRequest);
   const { leaveBalance } = useAppSelector((state) => state.leave);
+  const [ typesLoading, setTypesLoading ] = useState(false);
   const [formData, setFormData] = useState<LeaveRequestPayload>({
     leave_type_id: 0,
     start_date: '',
@@ -41,8 +42,10 @@ const LeaveRequestForm: React.FC = () => {
     };
 
   useEffect(() => {
+    setTypesLoading(true);
     dispatch(fetchLeaveTypes());
     fetchLeaveBalances();
+    setTypesLoading(false);
   }, [dispatch]);
 
   useEffect(() => {

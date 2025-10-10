@@ -199,10 +199,13 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
 
 const PendingRequestsList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { pendingRequests, isLoading, error } = useAppSelector(state => state.leaveRequest);
+  const { pendingRequests, error } = useAppSelector(state => state.leaveRequest);
+  const [isLoading, setIsLoading] = useState(true);
   const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
+    setIsLoading(true);
     dispatch(fetchAllLeaveRequests());
+    setIsLoading(false);
   }, [dispatch]);
 
   if (isLoading) {
