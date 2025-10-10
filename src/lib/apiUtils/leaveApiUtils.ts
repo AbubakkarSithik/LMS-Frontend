@@ -39,6 +39,21 @@ export const fetchLeaveRequests = async (): Promise<LeaveRequest[]> => {
 };
 
 
+export const fetchLeaveHistory = async (): Promise<LeaveRequest[]> => {
+    const response = await fetch(`${BASE_URL}/history`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: defaultHeaders(),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch leave requests.');
+    }
+    return response.json();
+};
+
+
 // GET leavetypes
 export const fetchLeaveTypes = async (): Promise<LeaveTypes[]> => {
     const res = await fetch(`${getBackendURL()}/organization/leave-types`, { credentials: "include" });

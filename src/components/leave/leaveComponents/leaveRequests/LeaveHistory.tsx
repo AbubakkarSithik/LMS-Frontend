@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
-import { fetchAllLeaveRequests, fetchAuditLog } from '@/lib/store/slices/leaveRequestSlice';
+import { fetchAllLeaveHistory, fetchAuditLog } from '@/lib/store/slices/leaveRequestSlice';
 import type { LeaveRequest } from '@/lib/types/type';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -27,14 +27,13 @@ const getStatusBadge = (status: LeaveRequest['status']) => {
 
 const LeaveHistory: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { appUser , isAdmin } = useAppSelector(state => state.auth);
+  const { isAdmin } = useAppSelector(state => state.auth);
   const { history, isLoading, error, activeRequestLog } = useAppSelector(state => state.leaveRequest);
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
   const [loadingLog, setLoadingLog] = useState(false);
-  const currentUserHistory =  isAdmin ? history :  history.filter((req) => req.app_user.id === appUser?.id);  
   const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
-    dispatch(fetchAllLeaveRequests());
+    dispatch(fetchAllLeaveHistory());
   }, [dispatch]);
 
   const handleViewDetails = async (id: number) => {
@@ -70,7 +69,7 @@ const LeaveHistory: React.FC = () => {
     <Card className={`${isDasboard ? 'shadow-none rounded': 'shadow-lg'}`}>
       <CardHeader>
         <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
-          <RiHistoryLine className="mr-2 text-ts12" /> Leave History <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{currentUserHistory.length}</span>
+          <RiHistoryLine className="mr-2 text-ts12" /> Leave History <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{history.length}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -87,14 +86,14 @@ const LeaveHistory: React.FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentUserHistory.length === 0 ? (
+              {history.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
                     No leave requests history found.
                   </TableCell>
                 </TableRow>
               ) : (
-                currentUserHistory.map((request, index) => (
+                history.map((request, index) => (
                   <motion.tr
                     key={request.leave_request_id}
                     initial={{ opacity: 0, y: 10 }}

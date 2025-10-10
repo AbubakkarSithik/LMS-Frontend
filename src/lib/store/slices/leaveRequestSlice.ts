@@ -16,6 +16,17 @@ export const fetchAllLeaveRequests = createAsyncThunk<LeaveRequest[], void, { re
   }
 );
 
+export const fetchAllLeaveHistory = createAsyncThunk<LeaveRequest[], void, { rejectValue: RejectValue }>(
+  'leave/fetchHistory',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await api.fetchLeaveHistory();
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const fetchLeaveTypes = createAsyncThunk<LeaveTypes[], void, { rejectValue: RejectValue }>(
     'leave/fetchTypes',
     async (_, { rejectWithValue }) => {
@@ -108,8 +119,13 @@ const leaveRequestSlice = createSlice({
     .addCase(fetchAllLeaveRequests.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
       state.isLoading = false;
       state.requests = action.payload;
-      state.history = action.payload; 
       state.pendingRequests = action.payload.filter(req => req.status === 'Pending' || req.status === 'Under Review');
+    })
+
+    // Fetch All Leave History
+    .addCase(fetchAllLeaveHistory.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
+      state.isLoading = false;
+      state.history = action.payload; 
     })
 
     // Request Leave
