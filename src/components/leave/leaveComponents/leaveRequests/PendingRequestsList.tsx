@@ -4,7 +4,7 @@ import { fetchAllLeaveRequests, approveLeave, rejectLeave } from '@/lib/store/sl
 import type { LeaveRequest } from '@/lib/types/type';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { RiCheckLine, RiCloseLine, RiAlertLine, RiLoader2Line } from "@remixicon/react";
+import { RiCheckLine, RiCloseLine, RiAlertLine, RiLoader2Line, RiVerifiedBadgeLine } from "@remixicon/react";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -227,7 +227,7 @@ const PendingRequestsList: React.FC = () => {
     <Card className={`${isDasboard ? 'shadow-none rounded': 'shadow-lg'}`}>
       <CardHeader>
         <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
-          <RiAlertLine className="mr-2 text-ts12" /> Pending Approvals <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{pendingRequests.length}</span>
+          <RiVerifiedBadgeLine className="mr-2 text-ts12" /> Pending Approvals <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{pendingRequests.length}</span>
         </CardTitle>
       </CardHeader>
       <CardContent>

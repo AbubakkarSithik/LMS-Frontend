@@ -73,7 +73,7 @@ const LeaveHistory: React.FC = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="overflow-auto max-h-[500px] hide-scroll">
           <Table>
             <TableHeader>
               <TableRow className="bg-primary/10">

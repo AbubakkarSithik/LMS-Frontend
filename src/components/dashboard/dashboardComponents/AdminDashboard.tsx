@@ -6,8 +6,8 @@ import PendingRequestsList from '@/components/leave/leaveComponents/leaveRequest
 const AdminDashboard: React.FC = () => {
   return (
     <div className='grid grid-cols-2 gap-4'>
-      <HolidayCarousel/>
       <PendingRequestsList />
+      <HolidayCarousel/>
       <div className='col-span-2'><LeaveHistory/></div>
     </div>
   )

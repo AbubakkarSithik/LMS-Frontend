@@ -115,8 +115,8 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
   }, [local, user, isAdmin, roleId, baseURL]);
 
   const handleSaveRelations = useCallback(async () => {
-    if (!user || !isAdmin) {
-      if (!isAdmin) toast.error("Only admins can manage relations");
+    if (!user) {
+      if (!isAdmin || !isHR) toast.error("Only admins and HRs can manage relations");
       return;
     }
 
@@ -175,9 +175,7 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
     [roles, local?.role_id]
   );
 
-  const saveButtonClasses = isAdmin
-    ? "cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
-    : "opacity-60 cursor-not-allowed";
+  const saveButtonClasses = "cursor-pointer bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white";
 
   return (
     <div className="bg-transparent">
@@ -262,7 +260,7 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
         </CardContent>
       </Card>
 
-      {!editingUserIsAdmin && !isHR && (
+      {!editingUserIsAdmin && (
         <Card>
           <CardHeader>
             <CardTitle>Relations / Reporting</CardTitle>
@@ -329,9 +327,8 @@ const UserProfileSetup: React.FC<UserProfileSetupProps> = ({ user }) => {
             <div className="mt-4 flex items-center gap-3 justify-end">
               <Button
                 onClick={handleSaveRelations}
-                disabled={!isAdmin || savingRelations}
+                disabled={savingRelations}
                 className={`flex items-center gap-2 ${saveButtonClasses}`}
-                title={!isAdmin ? "Only admins can manage relations" : ""}
               >
                 {savingRelations ? (
                   <RiLoader2Line className="animate-spin" />
