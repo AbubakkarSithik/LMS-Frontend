@@ -32,7 +32,6 @@ const LeaveHistory: React.FC = () => {
   const [isLogDialogOpen, setIsLogDialogOpen] = useState(false);
   const [loadingLogId, setLoadingLogId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const isDasboard = window.location.pathname === '/dashboard';
   useEffect(() => {
     setIsLoading(true);
     dispatch(fetchAllLeaveHistory());
@@ -69,7 +68,7 @@ const LeaveHistory: React.FC = () => {
   }
 
   return (
-    <Card className={`${isDasboard ? 'shadow-none rounded': 'shadow-lg'}`}>
+    <Card className='shadow-none rounded'>
       <CardHeader>
         <CardTitle className="text-2xl text-primary border-b pb-2 flex items-center">
           <RiHistoryLine className="mr-2 text-ts12" /> Leave History <span className='rounded-full flex items-center ml-1.5 text-sm justify-center bg-orange-100 text-ts12 w-6 h-6'>{history.length}</span>

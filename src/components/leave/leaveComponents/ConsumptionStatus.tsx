@@ -74,7 +74,7 @@ const ConsumptionStatus: React.FC = () => {
   return (
     <TooltipProvider>
       <motion.div
-        className="bg-white rounded-lg border p-6 shadow-sm"
+        className="bg-white rounded border p-6 shadow-none max-w-sm"
         initial={{ opacity: 0, y: 25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
@@ -84,8 +84,8 @@ const ConsumptionStatus: React.FC = () => {
           Consumption Status
         </h2>
 
-        <Card className="shadow-sm border-none">
-          <CardContent className="p-4 space-y-4">
+        <Card className="shadow-none border-none rounded-none p-0">
+          <CardContent className="space-y-2">
             {merged.map((lb, i) => {
               if (!lb) return null;
               const percentage =
@@ -100,13 +100,13 @@ const ConsumptionStatus: React.FC = () => {
                 <Tooltip key={lb.leave_type_id}>
                   <TooltipTrigger asChild>
                     <motion.div
-                      className="space-y-1"
+                      className="space-y-0"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.06 }}
                     >
                       <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-medium text-gray-700 truncate">{lb.name}</h3>
+                        <h3 className="text-xs font-medium text-gray-700 truncate">{lb.name}</h3>
                         <span
                           className={`text-xs font-semibold ${
                             percentage > 80 ? "text-red-500" : "text-green-600"

@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
-import { Separator } from "@/components/ui/separator";
 import type { LeaveTypes as LeaveProps } from "@/lib/types/type";
 import { getBackendURL } from "@/lib/utils";
 
@@ -176,9 +175,9 @@ const LeaveTypes: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      { isAdmin && <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-semibold text-black">Leave Types</h2>
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold text-black">Leave Policy | {organization?.name || ""} </h2>
+        {isAdmin && <div className="flex items-center gap-2">
           <Button 
             onClick={openCreateModal} 
             className="cursor-pointer bg-gradient-to-r from-ts12 via-orange-400 to-orange-700 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
@@ -186,19 +185,13 @@ const LeaveTypes: React.FC = () => {
             <RiAddLine />
             Add Leave Type
           </Button>
-        </div>
-      </div>}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Organization Leave Types</h3>
-            <div className="text-sm text-gray-500">{organization?.name || ""}</div>
-          </div>
-        </CardHeader>
-        <Separator />
-        <CardContent>
+        </div>}
+      </div>
+      <Card className="p-0 border-none shadow-none">
+        <CardHeader className="sr-only"></CardHeader>
+        <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center ">
+            <div className="flex items-center h-full justify-center ">
               <RiLoader2Line className="animate-spin text-ts12" size={26} />
             </div>
           ) : (leave_types && leave_types.length > 0) ? (
