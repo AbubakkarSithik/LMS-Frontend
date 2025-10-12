@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { getBackendURL } from "@/lib/utils";
+import { formatDateInput, getBackendURL } from "@/lib/utils";
 
 const Holidays: React.FC = () => {
   const dispatch = useDispatch();
@@ -36,15 +36,6 @@ const Holidays: React.FC = () => {
     holiday_date: "",
     is_recurring: false,
   });
-
-  const formatDateInput = (d: string | Date) => {
-    const date = typeof d === "string" ? new Date(d) : d;
-    if (Number.isNaN(date.getTime())) return "";
-    const y = date.getFullYear();
-    const m = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${y}-${m}-${day}`;
-  };
 
   const loadHolidays = async () => {
     if (!orgId) {
