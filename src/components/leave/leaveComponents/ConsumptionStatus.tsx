@@ -81,7 +81,7 @@ const ConsumptionStatus: React.FC = () => {
       >
         <h2 className="text-xl font-semibold flex items-center gap-2 text-gray-900 border-b pb-2 mb-4">
           <RiBarChartBoxLine size={20} className="text-ts12" />
-          Consumption Status
+           Leave Consumption
         </h2>
 
         <Card className="shadow-none border-none rounded-none p-0">

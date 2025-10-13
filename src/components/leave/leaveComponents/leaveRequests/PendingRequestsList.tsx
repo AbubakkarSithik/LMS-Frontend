@@ -55,7 +55,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
 
   const handleDashboardClick = () => {
       if(isDasboard){
-        navigate('/leave');
+        navigate('/leave#pending-request-list');
       }else{
         return
       }
@@ -69,6 +69,7 @@ const PendingRequestCard: React.FC<{ request: LeaveRequest }> = ({ request }) =>
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
       className={"border rounded-lg p-4 mb-4 hover:shadow-md transition-shadow bg-card" + (isDasboard && ' cursor-pointer')}
+      id='pending-request-list'
       onClick={handleDashboardClick}
     >
       <div className="flex justify-between items-start">

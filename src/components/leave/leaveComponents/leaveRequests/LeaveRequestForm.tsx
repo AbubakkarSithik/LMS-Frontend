@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { RiCalendarLine, RiMailSendLine, RiLoader2Line } from "@remixicon/react";
+import { RiCalendarLine, RiMailSendLine, RiLoader2Line, RiInfinityLine } from "@remixicon/react";
 import { toast } from "sonner";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { formatDateInput, getBackendURL } from "@/lib/utils";
@@ -30,7 +30,8 @@ const LeaveRequestForm: React.FC = () => {
     reason: "",
   });
   const [liveError, setLiveError] = useState<string>("");
-
+  const selectedType = leaveTypes.find((t) => t.leave_type_id === formData.leave_type_id);
+  const isLossOfPay = selectedType?.name?.toLowerCase().includes("loss of pay");
   useEffect(() => {
     const loadAll = async () => {
       setTypesLoading(true);
@@ -116,7 +117,7 @@ const LeaveRequestForm: React.FC = () => {
       return;
     }
 
-    if (selectedBalance && selectedBalance.remaining === 0) {
+    if (!isLossOfPay && selectedBalance && selectedBalance.remaining === 0) {
       setLiveError("Leave balance for this type is exhausted.");
       return;
     }
@@ -189,7 +190,7 @@ const LeaveRequestForm: React.FC = () => {
               }
               disabled={typesLoading}
             >
-              <SelectTrigger id="leave_type" className="bg-muted/30">
+              <SelectTrigger id="leave_type" className="bg-muted/30 cursor-pointer">
                 <SelectValue placeholder="Select leave type" />
               </SelectTrigger>
               <SelectContent>
@@ -205,11 +206,15 @@ const LeaveRequestForm: React.FC = () => {
             </Select>
             </div>
             {selectedBalance && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 flex items-center gap-0.5 mt-1">
                 Remaining balance:{" "}
-                <span className="font-semibold text-gray-700">
-                  {selectedBalance.remaining ?? 0} days
-                </span>
+                {isLossOfPay ? (
+                    <span className="inline-flex items-center gap-1">
+                      <RiInfinityLine className="inline-block" size={12} /> days
+                    </span>
+                  ) : (
+                    `${selectedBalance.remaining ?? 0} days`
+                  )}
               </p>
             )}
           </div>
@@ -263,7 +268,7 @@ const LeaveRequestForm: React.FC = () => {
           {/* Submit */}
           <Button
             type="submit"
-            className="w-1/3 mt-3.5 bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-md text-white"
+            className="w-1/3 mt-3.5 cursor-pointer flex bg-ts12 hover:bg-orange-400 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-md hover:shadow-ts12 text-white"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -293,7 +298,7 @@ const DatePickerField: React.FC<{
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            className="w-full justify-start text-left font-normal bg-muted/30"
+            className="w-full justify-start text-left font-normal bg-muted/30 cursor-pointer"
           >
             {selectedDate ? selectedDate.toDateString() : "Pick a date"}
           </Button>

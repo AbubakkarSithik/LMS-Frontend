@@ -1,4 +1,4 @@
-import React , { useState } from 'react'
+import React , { useState , useEffect } from 'react'
 import LeaveTypes from './leaveComponents/LeaveTypes'
 import LeaveRequestForm from './leaveComponents/leaveRequests/LeaveRequestForm'
 import PendingRequestsList from './leaveComponents/leaveRequests/PendingRequestsList'
@@ -10,11 +10,35 @@ import { Calendar, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {  Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { useLocation } from "react-router-dom";
 
 const Leave: React.FC = () => {
   const { isAdmin , isEmployee } = useSelector((state: RootState) => state.auth);
-  const [sheetOpen, setSheetOpen] = useState(false)
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+  if (location.hash) {
+    const targetId = location.hash.replace("#", "");
+    const scrollToTarget = () => {
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+        return true;
+      }
+      return false;
+    };
+    let tries = 0;
+    const interval = setInterval(() => {
+      const found = scrollToTarget();
+      tries++;
+      if (found || tries > 10) clearInterval(interval);
+    }, 100);
+  }
+}, [location]);
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
