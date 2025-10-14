@@ -16,9 +16,9 @@ export const getURL = () => {
 };
 export const getBackendURL = (): string => {
   if (import.meta.env.DEV) {
-    return "http://localhost:4005";
+    return "http://localhost:10000";
   } else {
-    return ""; 
+    return "https://lms-backend-api-d1wl.onrender.com"; 
   }
 };
 
