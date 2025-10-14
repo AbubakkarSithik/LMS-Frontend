@@ -229,7 +229,7 @@ return (
           </div>
         </header>
         {/* Main body */}
-        <main className="flex-1 overflow-y-auto hide-scroll">
+        <main className="flex-1 overflow-y-auto hide-scroll bg-gray-100">
           <Toaster />
           <Outlet />
         </main>
