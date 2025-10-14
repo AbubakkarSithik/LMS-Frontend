@@ -5,10 +5,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 export const getURL = () => {
-  let url =
-    import.meta.env.VITE_PUBLIC_SITE_URL ??  
-    import.meta.env.VERCEL_URL ?? 
-    "http://localhost:5173/";
+  let url =  import.meta.env.VERCEL_URL || "http://localhost:5173/";
 
   url = url.startsWith("http") ? url : `https://${url}`;
   url = url.endsWith("/") ? url : `${url}/`;
