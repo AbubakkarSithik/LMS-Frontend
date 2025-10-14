@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 export const getURL = () => {
   let url =
     import.meta.env.VITE_PUBLIC_SITE_URL ??  
-    import.meta.env.VITE_PUBLIC_VERCEL_URL ?? 
+    import.meta.env.VERCEL_URL ?? 
     "http://localhost:5173/";
 
   url = url.startsWith("http") ? url : `https://${url}`;
