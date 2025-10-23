@@ -147,6 +147,7 @@ export interface LeaveState {
   leaveTypes: LeaveTypes[];
   error: string | null;
   activeRequestLog: LeaveAuditLog[] | null;
+  allUsersRequests: LeaveRequest[];
 }
 
 export interface LeaveRequestPayload {

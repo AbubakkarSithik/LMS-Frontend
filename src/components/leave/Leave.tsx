@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import {  Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { useLocation } from "react-router-dom";
+import TeamCalender from './leaveComponents/TeamCalender'
 
 const Leave: React.FC = () => {
   const { isAdmin , isEmployee } = useSelector((state: RootState) => state.auth);
@@ -102,6 +103,9 @@ const Leave: React.FC = () => {
 
         <div className="">
             <LeaveHistory />
+        </div>
+        <div className="col-span-3">
+          <TeamCalender />
         </div>
       </div>
     </div>
