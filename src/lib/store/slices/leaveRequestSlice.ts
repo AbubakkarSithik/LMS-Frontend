@@ -84,6 +84,17 @@ export const fetchAuditLog = createAsyncThunk<LeaveAuditLog[], number, { rejectV
     }
 );
 
+export const fetchAllUsersLeaveRequests = createAsyncThunk<LeaveRequest[], void, { rejectValue: RejectValue }>(
+  'leave/fetchAllUsersRequests',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await api.fetchAllUsersLeaveRequests();
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // --- Redux Slice ---
 
 const initialState: LeaveState = {
@@ -91,6 +102,7 @@ const initialState: LeaveState = {
   pendingRequests: [],
   history: [],
   leaveTypes: [],
+  allUsersRequests: [],
   error: null,
   activeRequestLog: null,
 };
@@ -122,6 +134,11 @@ const leaveRequestSlice = createSlice({
     // Fetch All Leave History
     .addCase(fetchAllLeaveHistory.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
       state.history = action.payload; 
+    })
+
+    // Fetch All Users Leave Requests
+    .addCase(fetchAllUsersLeaveRequests.fulfilled, (state, action: PayloadAction<LeaveRequest[]>) => {
+      state.allUsersRequests = action.payload; 
     })
 
     // Handle Approvals

@@ -110,3 +110,17 @@ export const fetchAuditLog = async (id: number): Promise<LeaveAuditLog[]> => {
     }
     return response.json();
 };
+
+export const fetchAllUsersLeaveRequests = async (): Promise<LeaveRequest[]> => {
+    const response = await fetch(`${BASE_URL}/all-user-requests`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: defaultHeaders(),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to fetch leave requests.');
+    }
+    return response.json();
+};
